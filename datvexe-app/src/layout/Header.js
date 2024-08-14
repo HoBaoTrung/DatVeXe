@@ -1,56 +1,76 @@
-import { Button, Container, Nav, Navbar } from "react-bootstrap";
-import { Link, useNavigate } from "react-router-dom";
-// import { MyUserContext } from "../App";
-import { useContext } from "react";
+import React, { useEffect, useState } from 'react';
+import { Form, Button } from 'react-bootstrap';
+import Flatpickr from 'react-flatpickr';
+import 'flatpickr/dist/themes/material_green.css'; // Import CSS cho Flatpickr
+import './Header.css';
+import logo from '../assets/header-logo.png';
+import { format } from 'date-fns';
 
-const Header = () => {
-    const nav = useNavigate()
-    // const [user, dispatch] = useContext(MyUserContext)
+function Header({ withBackground = true }) {
+  const [trip, setTrip] = useState({
+    from: '',
+    to: '',
+    date: format(new Date(), 'yyyy-MM-dd'),
+  });
 
+  const [station, setStation] = useState([
+    { id: 1, name: 'Hà Nội' },
+    { id: 2, name: 'Hồ Chí Minh' },
+    // Thêm các trạm khác vào đây
+  ]);
 
+  const updateField = (field, value) => {
+    setTrip({
+      ...trip,
+      [field]: value,
+    });
+  };
 
-    // const logout = () => {
-    //     dispatch({
-    //         'type': 'logout'
-    //     })
-    //     return nav('/')
-    // }
-    return (
-        <>
-            <Navbar expand="lg" className="bg-body-tertiary">
-                <Container>
-                    <Navbar.Brand href="/">
-                        <img src="https://hapotravel.com/wp-content/uploads/2023/04/tong-hop-25-mau-logo-hoa-sen-dep-va-y-nghia_1.jpg"
-                            alt="Logo" style={{width:40 }}></img>
-                    </Navbar.Brand>
-                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav">
-                        <Nav className="me-auto">
+  const findTrip = () => {
+    console.log('Searching for trip:', trip);
+    // Thêm logic tìm kiếm chuyến đi tại đây
+  };
 
-                            <Link className="nav-link" to="/">Trang chu</Link>
-                            <Link className="nav-link" to="/">Bến xe</Link>
-                            <Link className="nav-link" to="/">Liên hệ</Link>
-                            <Link className="nav-link" to="/">Đăng ký</Link>
-                            <Link className="nav-link" to="/">Đăng nhập</Link>
-                            {/* {user === null ? <>
-                                <Link className="nav-link" to="/login">Xem don hang</Link>
-                                <Link className="nav-link" to="/login">Them don hang</Link>
-                                <Link className="nav-link text-success" to="/login">Dang nhap</Link>
-                                <Link className="nav-link text-danger" to="/register">Dang ky</Link>
+  useEffect(() => {
+    const header = document.querySelector('.header');
 
-                            </> : <>
-                                <Link className="nav-link" to="/product">Xem don hang</Link>
-                                <Link className="nav-link" to="/addProduct">Them don hang</Link>
-                                <Link className="nav-link text-danger" to="/">{user.username}</Link>
+    if (!withBackground) {
+      header.classList.add('white-background');
+      header.style.height = '90px';
+    } else {
+      header.classList.remove('white-background');
 
-                                <Button className="btn-danger" onClick={logout}>Dang xuat</Button>
-                            </>} */}
+      const image = new Image();
+      image.src = require('../assets/header-background.png');
 
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-        </>
-    )
+      image.onload = () => {
+        header.style.height = `${image.height}px`;
+      };
+    }
+  }, [withBackground]);
+
+  return (
+    <div className={withBackground ? "header-background" : ""}>
+      <header className="header">
+        <div className="container">
+          <a href='/'><img src={logo} alt="Logo" className="logo" /></a>
+          <nav className="nav">
+            {/* Thêm nội dung nav nếu cần */}
+          </nav>
+          <div className="auth">
+            <a href="#" className="login">Login</a>
+            <button className="sign-up">Sign up</button>
+          </div>
+        </div>
+        <div className="header-text">
+            <h1 className="main-heading">Helping Others</h1>
+            <h2 className="sub-heading">Live & Travel</h2>
+            <p className="description">Special offers to suit your plan</p>
+        </div>
+       
+      </header>
+    </div>
+  );
 }
+
 export default Header;

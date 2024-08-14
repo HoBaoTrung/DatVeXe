@@ -10,25 +10,16 @@ import ViewTrip from './components/ViewTrip';
 function App() {
   return (
     <>
-    {/* <MyUserContext.Provider value={[user, dispatch]}> */}
       <BrowserRouter>
-        <Header/>
-         <Routes>
-          <Route path='/' element={<Home/>}/>
-          <Route path='/StarRating' element={<StarRating/>}/>
-          <Route path='/viewtrip' element={<ViewTrip/>}/>
-          {/*<Route path='/product/:productId' element={<ProductDetail/>}/>
-          
-          <Route path='/login' element={<Login/>}/>
-          <Route path='/register' element={<Register/>}/>
-          <Route path='/product' element={<ViewProduct/>}/>*/}
+        <Header withBackground={true} />
+        <Routes>
+          <Route index element={<Home />} />
+          <Route path='/StarRating' element={<StarRating />} />
+          <Route path='/viewtrip' element={<ViewTrip />} />
         </Routes> 
         <Footer /> 
-
       </BrowserRouter>
-      {/* </MyUserContext.Provider> */}
     </>
-
   );
 }
 
