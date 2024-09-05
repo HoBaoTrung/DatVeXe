@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Flatpickr from 'react-flatpickr';
 import 'flatpickr/dist/themes/material_green.css'; // Import CSS cho Flatpickr
 import './Header.css';
 import logo from '../assets/header-logo.png';
 import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
+import { MyUserContext } from '../App';
 
 function Header({ withBackground = true }) {
+  const [user, dispatch] = useContext(MyUserContext);
   const [trip, setTrip] = useState({
     from: '',
     to: '',
@@ -41,7 +44,7 @@ function Header({ withBackground = true }) {
       header.classList.remove('white-background');
 
       const image = new Image();
-      image.src = require('../assets/header-background.png');
+      image.src = require('../assets/home-header-image.png');
 
       image.onload = () => {
         header.style.height = `${image.height}px`;
@@ -50,7 +53,9 @@ function Header({ withBackground = true }) {
   }, [withBackground]);
 
   return (
+
     <div className={withBackground ? "header-background" : ""}>
+
       <header className="header">
         <div className="container">
           <a href='/'><img src={logo} alt="Logo" className="logo" /></a>
@@ -58,16 +63,18 @@ function Header({ withBackground = true }) {
             {/* Thêm nội dung nav nếu cần */}
           </nav>
           <div className="auth">
-            <a href="#" className="login">Login</a>
-            <button className="sign-up">Sign up</button>
+            {user === null ? <>
+              <Link className="login" to="/login">Login</Link>
+              <Link className="login" to="/register">
+                <button className="sign-up">Sign up</button>
+              </Link>
+            </> : <Link onClick={() => dispatch({ "type": "logout" })} className="login">
+              <button className="sign-up">Logout</button>
+            </Link>}
           </div>
         </div>
-        <div className="header-text">
-            <h1 className="main-heading">Helping Others</h1>
-            <h2 className="sub-heading">Live & Travel</h2>
-            <p className="description">Special offers to suit your plan</p>
-        </div>
-       
+
+
       </header>
     </div>
   );

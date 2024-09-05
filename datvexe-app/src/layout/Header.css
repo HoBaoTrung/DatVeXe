@@ -3,14 +3,14 @@ body{
 }
 
 .header {
-  background-image: url('../assets/header-background.png');
+  background-image: url('../assets/home-header-image.png');
   background-size: cover;
   padding: 20px;
   border-radius: 25px;
 }
 
 .header-background .header {
-  background-image: url('../assets/header-background.png');
+  background-image: url('../assets/home-header-image.png');
 }
 
 .white-background {

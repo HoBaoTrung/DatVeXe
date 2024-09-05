@@ -1,5 +1,5 @@
 import React from 'react';
-import './Footer.css';
+import './css/Footer.css';
 import logo from '../assets/footer-logo.png';
 import facebook_icon from '../assets/facebook-icon.png';
 import x_icon from '../assets/x-icon.png';

@@ -67,6 +67,7 @@ const SearchForm = ({
 
     return (
         <Container maxWidth="lg" style={{ borderRadius: '15px', padding: '25px 15px', backgroundColor: 'white', ...style }}>
+           
             <Grid container spacing>
                 <Grid item xs={12}>
                     <Grid container spacing>

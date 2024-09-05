@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { TextField, Button, Checkbox, FormControlLabel, Link, IconButton } from '@mui/material';
 import logo from '../assets/account-flow-icon.png';
 import loginBackground from '../assets/account-flow-background.png'; // Đảm bảo đường dẫn đúng
@@ -8,7 +8,10 @@ import eyeOffIcon from '../assets/eye-close-icon.png';
 import facebookIcon from '../assets/facebook-login-icon.png';
 import googleIcon from '../assets/google-login-icon.png';
 import appleIcon from '../assets/apple-login-icon.png';
-
+import Apis, { endpoint } from '../configs/Apis';
+import cookie from "react-cookies";
+import { MyUserContext } from "../App";
+import { useNavigate } from 'react-router-dom';
 // Inline styles
 const styles = {
   container: {
@@ -159,6 +162,8 @@ function App() {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [user, dispatch] = useContext(MyUserContext);
+  const nav = useNavigate();
 
   // Hàm để thay đổi trạng thái hiển thị mật khẩu
   const handleClickShowPassword = () => {
@@ -184,7 +189,7 @@ function App() {
   };
 
   // Hàm để xử lý khi nhấn nút Login
-  const handleLogin = () => {
+  const handleLogin = async () => {
     let hasError = false;
 
     // Kiểm tra email hợp lệ
@@ -205,8 +210,26 @@ function App() {
 
     // Nếu không có lỗi, thực hiện đăng nhập
     if (!hasError) {
-      console.log('Login details:', { email, password });
-      // Thực hiện hành động đăng nhập
+
+      try {
+        let res = await Apis.post(endpoint['login'], {
+          "email": email,
+          "password": password
+        });
+        
+        cookie.save("user", res.data.userDetails);
+        cookie.save("token", res.data.accessToken);
+        dispatch({
+          "type": "login",
+          "payload": res.data.userDetails
+      });
+      nav("/");
+        
+      } catch (error) {
+        alert("Sai email hoặc mật khẩu")
+
+      }
+
     }
   };
 

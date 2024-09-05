@@ -8,6 +8,8 @@ import eyeOffIcon from '../assets/eye-close-icon.png';
 import facebookIcon from '../assets/facebook-login-icon.png';
 import googleIcon from '../assets/google-login-icon.png';
 import appleIcon from '../assets/apple-login-icon.png';
+import Apis, { endpoint } from '../configs/Apis';
+import { useNavigate } from 'react-router-dom';
 
 // Inline styles
 const styles = {
@@ -15,7 +17,7 @@ const styles = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    padding:'1% 0',
+    padding: '1% 0',
     backgroundColor: '#f4f4f4',
   },
   signUpContainer: {
@@ -144,6 +146,7 @@ const styles = {
 };
 
 function SignUp() {
+  const nav = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [password, setPassword] = useState('');
@@ -189,13 +192,40 @@ function SignUp() {
     return errors;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = validateForm();
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
       // Submit form if no errors
-      console.log('Form submitted');
+      let form = new FormData()
+      form.append("email", email)
+      form.append("password", password)
+      form.append("phoneNumber", phoneNumber)
+      form.append("lastName", lastName)
+      form.append("firstName", firstName)
+      try {
+        let res = await Apis.post(endpoint['register'], form)
+        
+        if (res.status === 201) nav('/login')
+        
+      }
+      catch (err) {
+         // Lấy thông báo lỗi từ phản hồi API
+        const errors = {};
+        if (err.response.data.name) {
+          
+          errors.firstName = err.response.data.name;
+        }
+        if (err.response.data.phone) {
+          errors.phoneNumber = err.response.data.phone;
+        }
+        if (err.response.data.email) {
+          errors.email = err.response.data.email;
+        }
+        setFormErrors(errors);
+      }
+
     }
   };
 
@@ -365,7 +395,7 @@ function SignUp() {
           </div>
 
           {formErrors.termsAccepted && <p style={styles.checkboxError}>{formErrors.termsAccepted}</p>}
-          
+
           <Button style={styles.signUpButton} onClick={handleSubmit}>Create Account</Button>
 
           <div style={styles.loginLinkContainer}>

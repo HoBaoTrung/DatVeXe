@@ -87,7 +87,7 @@ const MainPage = () => {
 
     return (
         <div style={{ backgroundColor: '#FAFBFC', fontFamily: 'Montserrat, sans-serif' }}>
-            <Header isTransparentBackground={false} />
+          
             <div style={{ backgroundColor: '#FAFBFC', margin: '0 100px 100px 100px' }}>
                 <SearchForm
                     style={{ marginTop: '50px' }}
