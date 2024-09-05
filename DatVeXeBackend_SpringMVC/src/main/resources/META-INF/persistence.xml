@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="com.dvx_DatVeXeBackend_war_1.0-SNAPSHOTPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>com.dvx.pojo.Role</class>
+    <class>com.dvx.pojo.Route</class>
+    <class>com.dvx.pojo.User</class>
+    <class>com.dvx.pojo.Seat</class>
+    <class>com.dvx.pojo.Ticket</class>
+    <class>com.dvx.pojo.Types</class>
+    <class>com.dvx.pojo.Otp</class>
+    <class>com.dvx.pojo.Order1</class>
+    <class>com.dvx.pojo.Trip</class>
+    <class>com.dvx.pojo.Station</class>
+    <class>com.dvx.pojo.Car</class>
+    <class>com.dvx.pojo.TypesSeat</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/dat_ve_xe_khach?zeroDateTimeBehavior=CONVERT_TO_NULL"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="trung@123"/>
+    </properties>
+  </persistence-unit>
+</persistence>
