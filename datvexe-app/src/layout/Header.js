@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useContext, useEffect, useState } from 'react';
 import { Form, Button } from 'react-bootstrap';
 import Flatpickr from 'react-flatpickr';
@@ -33,15 +34,19 @@ function Header({ withBackground = true }) {
     console.log('Searching for trip:', trip);
     // Thêm logic tìm kiếm chuyến đi tại đây
   };
+=======
+import React, { useEffect } from 'react';
+import './css/Header.css';
+import logo from '../assets/header-logo.png';
+>>>>>>> 91c8a07e3bb493afce5d95d86bff393f6492b1c5
 
+function Header({ isTransparentBackground = true }) {
   useEffect(() => {
     const header = document.querySelector('.header');
-
-    if (!withBackground) {
-      header.classList.add('white-background');
-      header.style.height = '90px';
-    } else {
+    if (isTransparentBackground) {
+      header.classList.add('transparent-background');
       header.classList.remove('white-background');
+<<<<<<< HEAD
 
       const image = new Image();
       image.src = require('../assets/home-header-image.png');
@@ -49,10 +54,16 @@ function Header({ withBackground = true }) {
       image.onload = () => {
         header.style.height = `${image.height}px`;
       };
+=======
+    } else {
+      header.classList.add('white-background');
+      header.classList.remove('transparent-background');
+>>>>>>> 91c8a07e3bb493afce5d95d86bff393f6492b1c5
     }
-  }, [withBackground]);
+  }, [isTransparentBackground]);
 
   return (
+<<<<<<< HEAD
 
     <div className={withBackground ? "header-background" : ""}>
 
@@ -77,6 +88,17 @@ function Header({ withBackground = true }) {
 
       </header>
     </div>
+=======
+    <header className={`header ${isTransparentBackground ? 'transparent-background' : 'white-background'}`}>
+      <div className="container">
+        <a href='/'><img src={logo} alt="Logo" className="logo" /></a>
+        <div className="auth">
+          <a href="/log-in" className="login">Login</a>
+          <a href="/sign-up"><button className="sign-up">Sign up</button></a> 
+        </div>
+      </div>
+    </header>
+>>>>>>> 91c8a07e3bb493afce5d95d86bff393f6492b1c5
   );
 }
 
