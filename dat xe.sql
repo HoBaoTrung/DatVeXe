@@ -90,26 +90,37 @@ create table `otp`(
 `userID` bigint, FOREIGN KEY (`userID` ) references `user`(`id`)
 );
 
+CREATE TABLE `types_seat`(
+`id` bigint primary key NOT NULL AUTO_INCREMENT,
+`name` varchar(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+);
+INSERT INTO `types_seat` (`name`) VALUES
+('Nằm'),('Ngồi');
+
 CREATE TABLE `types`(
 `id` bigint primary key NOT NULL AUTO_INCREMENT,
 `name` varchar(255)  CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL, 
-`quantity` int not null,
-
-`image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+`quantity` int not null
 );
-INSERT INTO `types` (`name`, `quantity`,  `image`) VALUES ('Xe 12 chỗ',12,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRjfg22SAlVZ5dJvvvRuJjvTmPYeCqGHzFTw&s'),
-('Xe 7 chỗ',7,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTye7hps-5C-fcc-GpAlcyCT-cLt95r06y00A&s'),
-('Xe 45 chỗ',45,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNiwbm5bYpalMRR6DF9aCrwT2Xj-n3NTRZVA&s');
+INSERT INTO `types` (`name`, `quantity`) 
+VALUES ('Xe 12 chỗ',12),
+('Xe 7 chỗ',7),
+('Xe 45 chỗ',45);
 
 CREATE TABLE `car` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `car_number` varchar(10) NOT NULL,
   `seat_price` double ,
   `type_id` bigint not null,
+  `type_seat_id` bigint not null, foreign key(`type_seat_id`) references  `types_seat`(`id`),
+  `image` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`type_id` ) references `types`(`id`)
 );
-INSERT INTO `car` (`car_number`, `type_id`,`seat_price`) VALUES ('000091',1, 70000),('000245',2,80000),('000165',3,60000);
+INSERT INTO `car` (`car_number`, `type_id`,`seat_price`, `type_seat_id`,`image`) VALUES 
+('000091',1, 70000,2,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRRjfg22SAlVZ5dJvvvRuJjvTmPYeCqGHzFTw&s'),
+('000245',2,80000,2,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTye7hps-5C-fcc-GpAlcyCT-cLt95r06y00A&s'),
+('000165',3,60000,1,'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNiwbm5bYpalMRR6DF9aCrwT2Xj-n3NTRZVA&s');
 
 CREATE TABLE `seat` (
   `id` bigint NOT NULL AUTO_INCREMENT,
@@ -134,7 +145,7 @@ CREATE TABLE `station`(
 `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
 UNIQUE KEY `name` (`name`)
 );
-INSERT INTO `dat_ve_xe_khach`.`station` (`name`) VALUES ('Nhà Bè'), ('Quận 3'),('Quận 4'), ('Quận 5'),
+INSERT INTO `station` (`name`) VALUES ('Nhà Bè'), ('Quận 3'),('Quận 4'), ('Quận 5'),
 	('An Giang'),
 	('Bà rịa Vũng Tàu'),
 	('Bạc Liêu'),
@@ -235,7 +246,7 @@ INSERT INTO `route` VALUES
 (19,'NB-Q3-4205','2024-05-16 14:51:05.695667',2,1,60000),
 (20,'NB-Q3-5427','2024-05-16 14:51:05.696682',2,1,50000);
 
-DROP TABLE IF EXISTS `trip`;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `trip` (
@@ -252,58 +263,63 @@ CREATE TABLE `trip` (
   CONSTRAINT `fk_trip_car` FOREIGN KEY (`car_id`) REFERENCES `car` (`id`),
   CONSTRAINT `fk_trip_route` FOREIGN KEY (`route_id`) REFERENCES `route` (`id`)
 ) ;
-INSERT INTO `trip` (`created_at`, `is_active`, `depart_at`, `car_id`, `route_id`, `price`) 
+DELIMITER $$
+
+CREATE TRIGGER `calculate_trip_price` BEFORE INSERT ON `trip`
+FOR EACH ROW 
+BEGIN
+  DECLARE seatPrice double;
+  DECLARE routePrice double;
+
+  SELECT `seat_price` INTO seatPrice FROM `car` WHERE `id` = NEW.car_id;
+  SELECT `route_price` INTO routePrice FROM `route` WHERE `id` = NEW.route_id;
+
+  SET NEW.price = IFNULL(seatPrice, 0) + IFNULL(routePrice, 0);
+END$$
+
+DELIMITER ;
+INSERT INTO `trip` (`created_at`, `is_active`, `depart_at`, `car_id`, `route_id`) 
 VALUES 
-('2024-05-16 14:51:05.672698', 1, '2024-05-16 14:51:05.672698', 1, 2, 50000.0),
-('2024-05-16 14:51:05.675086', 1, '2024-05-16 14:51:05.675086', 1, 2, 50000.0),
-('2024-05-16 14:51:05.677094', 1, '2024-05-16 14:51:05.677094', 1, 2, 80000.0),
-('2024-05-16 14:51:05.678095', 1, '2024-05-16 14:51:05.678095', 1, 2, 60000.0),
-('2024-05-16 14:51:05.679092', 1, '2024-05-16 14:51:05.679092', 1, 2, 60000.0),
-('2024-05-16 14:51:05.680091', 1, '2024-05-16 14:51:05.680091', 1, 2, 60000.0),
-('2024-05-16 14:51:05.681098', 1, '2024-05-16 14:51:05.681098', 1, 2, 50000.0),
-('2024-05-16 14:51:05.682618', 1, '2024-05-16 14:51:05.682618', 1, 2, 90000.0),
-('2024-05-16 14:51:05.683624', 1, '2024-05-16 14:51:05.683624', 1, 2, 80000.0),
-('2024-05-16 14:51:05.684623', 1, '2024-05-16 14:51:05.684623', 1, 2, 50000.0),
-('2024-05-16 14:51:05.685637', 1, '2024-05-16 14:51:05.685637', 1, 2, 90000.0),
-('2024-05-16 14:51:05.686645', 1, '2024-05-16 14:51:05.686645', 1, 2, 50000.0),
-('2024-05-16 14:51:05.688643', 1, '2024-05-16 14:51:05.688643', 1, 2, 60000.0),
-('2024-05-16 14:51:05.689645', 1, '2024-05-16 14:51:05.689645', 1, 2, 60000.0),
-('2024-05-16 14:51:05.690643', 1, '2024-05-16 14:51:05.690643', 1, 2, 50000.0),
-('2024-05-16 14:51:05.691645', 1, '2024-05-16 14:51:05.691645', 2, 1, 70000.0),
-('2024-05-16 14:51:05.692644', 1, '2024-05-16 14:51:05.692644', 2, 1, 80000.0),
-('2024-05-16 14:51:05.693668', 1, '2024-05-16 14:51:05.693668', 2, 1, 50000.0),
-('2024-05-16 14:51:05.695667', 1, '2024-05-16 14:51:05.695667', 2, 1, 60000.0),
-('2024-05-16 14:51:05.696682', 1, '2024-05-16 14:51:05.696682', 2, 1, 50000.0);
-
-create table online_payment_result(
-`payment_id` bigint primary key not null auto_increment, 
-`payment_code` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-`created_at` datetime(6) DEFAULT NULL
-);
-insert into `online_payment_result` values
-(1,114523642,'2024-01-16 14:51:05.672698');
+('2024-05-16 14:51:05.672698', 1, '2024-05-16 14:51:05.672698', 1, 2),
+('2024-05-16 14:51:05.675086', 1, '2024-05-16 14:51:05.675086', 1, 2),
+('2024-05-16 14:51:05.677094', 1, '2024-05-16 14:51:05.677094', 1, 2),
+('2024-05-16 14:51:05.678095', 1, '2024-05-16 14:51:05.678095', 1, 2),
+('2024-05-16 14:51:05.679092', 1, '2024-05-16 14:51:05.679092', 1, 2),
+('2024-05-16 14:51:05.680091', 1, '2024-05-16 14:51:05.680091', 1, 2),
+('2024-05-16 14:51:05.681098', 1, '2024-05-16 14:51:05.681098', 1, 2),
+('2024-05-16 14:51:05.682618', 1, '2024-05-16 14:51:05.682618', 1, 2),
+('2024-05-16 14:51:05.683624', 1, '2024-05-16 14:51:05.683624', 1, 2),
+('2024-05-16 14:51:05.684623', 1, '2024-05-16 14:51:05.684623', 1, 2),
+('2024-05-16 14:51:05.685637', 1, '2024-05-16 14:51:05.685637', 1, 2),
+('2024-05-16 14:51:05.686645', 1, '2024-05-16 14:51:05.686645', 1, 2),
+('2024-05-16 14:51:05.688643', 1, '2024-05-16 14:51:05.688643', 1, 2),
+('2024-05-16 14:51:05.689645', 1, '2024-05-16 14:51:05.689645', 1, 2),
+('2024-05-16 14:51:05.690643', 1, '2024-05-16 14:51:05.690643', 1, 2),
+('2024-05-16 14:51:05.691645', 1, '2024-05-16 14:51:05.691645', 2, 1),
+('2024-05-16 14:51:05.692644', 1, '2024-05-16 14:51:05.692644', 2, 1),
+('2024-05-16 14:51:05.693668', 1, '2024-05-16 14:51:05.693668', 2, 1),
+('2024-05-16 14:51:05.695667', 1, '2024-05-16 14:51:05.695667', 2, 1),
+('2024-05-16 14:51:05.696682', 1, '2024-05-16 14:51:05.696682', 2, 1);
 
 
-CREATE TABLE `order` (
+CREATE TABLE `orders` (
 	`id` bigint NOT NULL AUTO_INCREMENT,
-   
     `customer_id` bigint NOT NULL,
-    `payment_id` bigint NOT NULL,
+   
+    `pay_at` datetime(6) DEFAULT NULL,
     PRIMARY KEY (`id`),
    
     KEY `order_customer_idx` (`customer_id`),
-    KEY `order_payment_idx` (`payment_id`),
   
-	CONSTRAINT `fk_order_customer` FOREIGN KEY (`customer_id`) REFERENCES `user` (`id`),
-	CONSTRAINT `fk_order_payment` FOREIGN KEY (`payment_id`) REFERENCES `online_payment_result` (`payment_id`)
+	CONSTRAINT `fk_order_customer` FOREIGN KEY (`customer_id`) REFERENCES `user` (`id`)
 );
-insert into `order` values
-(1,1,1);
+insert into `orders` values
+(1,1,'2024-01-16 14:51:05.672698');
 
 
 CREATE TABLE `ticket` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `created_at` datetime(6) NOT NULL,
+  `expired_at` datetime(6) NOT NULL,
   `paid_at` datetime(6) DEFAULT NULL,
   `trip_id` bigint NOT NULL,
   `seat_id` bigint NOT NULL,
@@ -312,14 +328,34 @@ CREATE TABLE `ticket` (
   PRIMARY KEY (`id`),
   KEY `ticket_trip_idx` (`trip_id`),
   KEY `ticket_seat_idx` (`seat_id`),
-  foreign key(`order_id`) references  `order` (`id`),
+  foreign key(`order_id`) references  `orders` (`id`),
   CONSTRAINT `fk_ticket_trip` FOREIGN KEY (`trip_id`) REFERENCES `trip` (`id`),
   CONSTRAINT `fk_ticket_seat` FOREIGN KEY (`seat_id`) REFERENCES `seat` (`id`)
 );
-insert into `ticket` values 
-(1, '2024-01-16 14:51:05.672698','2024-01-16 14:51:05.672698',1,1,1,1),
-(2, '2024-01-16 14:51:05.672698','2024-01-16 14:51:05.672698',1,2,1,1),
-(3, '2024-01-16 14:51:05.672698','2024-01-16 14:51:05.672698',1,3,1,1),
-(4, '2024-01-16 14:51:05.672698','2024-01-16 14:51:05.672698',1,4,1,1),
-(5, '2024-01-16 14:51:05.672698','2024-01-16 14:51:05.672698',1,5,1,1)
+DELIMITER $$
+
+CREATE TRIGGER set_expired_at
+BEFORE INSERT ON ticket
+FOR EACH ROW
+BEGIN
+    DECLARE depart_time DATETIME(6);
+
+    -- Lấy thời gian khởi hành từ bảng trip dựa trên trip_id
+    SELECT depart_at INTO depart_time
+    FROM trip
+    WHERE id = NEW.trip_id;
+
+    -- Đặt giá trị expired_at bằng depart_at cộng thêm 1 giờ (hoặc tùy chỉnh khoảng thời gian)
+    SET NEW.expired_at = DATE_ADD(depart_time, INTERVAL 0 HOUR);
+END;
+
+
+$$ DELIMITER 
+
+insert into `ticket`(`id`, `paid_at`,`trip_id`,`seat_id`,`is_active`,`order_id`) values 
+(1, '2024-01-16 14:51:05.672698',1,1,1,1),
+(2, '2024-01-16 14:51:05.672698',1,2,1,1),
+(3, '2024-01-16 14:51:05.672698',1,3,1,1),
+(4, '2024-01-16 14:51:05.672698',1,4,1,1),
+(5, '2024-01-16 14:51:05.672698',1,5,1,1)
 ;
