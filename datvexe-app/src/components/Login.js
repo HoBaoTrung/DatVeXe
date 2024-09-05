@@ -12,6 +12,8 @@ import Apis, { endpoint } from '../configs/Apis';
 import cookie from "react-cookies";
 import { MyUserContext } from "../App";
 import { useNavigate } from 'react-router-dom';
+import Spinner from '../layout/Spinner';
+
 // Inline styles
 const styles = {
   container: {
@@ -164,6 +166,7 @@ function App() {
   const [showPassword, setShowPassword] = useState(false);
   const [user, dispatch] = useContext(MyUserContext);
   const nav = useNavigate();
+  const [loading, setLoading] = useState(false)
 
   // Hàm để thay đổi trạng thái hiển thị mật khẩu
   const handleClickShowPassword = () => {
@@ -212,20 +215,22 @@ function App() {
     if (!hasError) {
 
       try {
+        setLoading(true)
         let res = await Apis.post(endpoint['login'], {
           "email": email,
           "password": password
         });
-        
+
         cookie.save("user", res.data.userDetails);
         cookie.save("token", res.data.accessToken);
         dispatch({
           "type": "login",
           "payload": res.data.userDetails
-      });
-      nav("/");
-        
+        });
+        nav("/");
+
       } catch (error) {
+        setLoading(false)
         alert("Sai email hoặc mật khẩu")
 
       }
@@ -285,11 +290,15 @@ function App() {
             />
             <Link href="/forgot-password" style={styles.forgotPassword}>Forgot Password</Link>
           </div>
-
-          <Button style={styles.loginButton} onClick={handleLogin}>
-            Login
-          </Button>
-
+          
+          {loading == true ?
+           
+              <Spinner />
+            :
+            <Button style={styles.loginButton} onClick={handleLogin}>
+              Login
+            </Button>
+          }
           <div style={styles.orContainer}>
             <div style={styles.orLine}>
               <div style={styles.orLineBefore}></div>
