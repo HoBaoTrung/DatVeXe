@@ -7,6 +7,7 @@ package com.dvx.repositories.impl;
 import com.dvx.pojo.Station;
 import com.dvx.repositories.StationRepository;
 import java.util.List;
+import javax.persistence.Query;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
@@ -28,6 +29,14 @@ public class StationRepositoryImpl implements StationRepository {
     public List<Station> getStations() {
         Session session = sessionFactoryBean.getObject().getCurrentSession();
         return session.createQuery("FROM Station", Station.class).list();
+    }
+
+    @Override
+    public Station getStationsByID(long id) {
+        Session session = sessionFactoryBean.getObject().getCurrentSession();
+        Query q = session.createNamedQuery("Station.findById");
+        q.setParameter("id", id);
+        return (Station) q.getSingleResult();
     }
 
 }

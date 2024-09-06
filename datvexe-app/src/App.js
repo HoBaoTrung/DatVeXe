@@ -9,6 +9,7 @@ import SignUp from './components/SignUp';
 import MainPage from './components/FindWithFilter';
 import { createContext, useReducer } from 'react';
 import MyUserReducer from './reducer/MyUserReducer';
+import ForgotPassword from './components/ForgotPassword';
 export const MyUserContext = createContext()
 function App() {
   const [user, dispatch] = useReducer(MyUserReducer, cookie.load("user") || null);
@@ -21,7 +22,7 @@ function App() {
         <Header withBackground={true} />
         <Routes>
           <Route index element={<Home />} />
-          
+          <Route path='/forgotPassword' element={<ForgotPassword />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<SignUp />} />
           <Route path='/search' element={<MainPage />} />

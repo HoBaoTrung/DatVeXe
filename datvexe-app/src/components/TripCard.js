@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, Typography, Button, CardMedia, Box } from '@mui/material';
 
 // Đổi tên thành phần từ tripCard thành TripCard
-const TripCard = ({ carLogo, carName, price, departureTime, arrivalTime, duration }) => {
+const TripCard = ({ carImage, carNumber, price, departureTime, departureDate, nameCarType }) => {
     // Inline styles using MUI Box
     const tripCardStyle = {
         display: 'flex',
@@ -92,21 +92,21 @@ const TripCard = ({ carLogo, carName, price, departureTime, arrivalTime, duratio
             <CardContent sx={tripInfoStyle}>
                 <CardMedia
                     component="img"
-                    image={carLogo}
-                    alt={`${carName} logo`}
+                    image={carImage}
+                    alt={`${carNumber} logo`}
                     sx={carLogoStyle}
                 />
                 <Box sx={tripDetailsStyle}>
                     <Typography variant="h6" sx={carNameStyle}>
-                        {carName}
+                        {carNumber}
                     </Typography>
                     <Typography sx={tripTimeStyle}>
-                        <span style={departureTimeStyle}>{departureTime}</span> 
+                        <span style={arrivalTimeStyle}>{departureDate}</span>
                         <span> - </span>
-                        <span style={arrivalTimeStyle}>{arrivalTime}</span>
+                        <span style={departureTimeStyle}>{departureTime}</span> 
                     </Typography>
                     <Typography sx={tripDurationStyle}>
-                        {duration}
+                        {nameCarType}
                     </Typography>
                 </Box>
             </CardContent>

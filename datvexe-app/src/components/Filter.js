@@ -21,14 +21,14 @@ const removeBorderOfFilterItem = {
 };
 
 const filterItemStyle = {
-    padding:'0px',
- };
+    padding: '0px',
+};
 
- const filterItemTitleStyle = {
-    fontWeight:'bold'
- }
+const filterItemTitleStyle = {
+    fontWeight: 'bold'
+}
 
- const rangeSliderStyle = {
+const rangeSliderStyle = {
     color: '#112211', // Slider track color (default track color when not selected)
     height: '1px',
     '& .MuiSlider-thumb': {
@@ -46,21 +46,35 @@ const accordionDetailsStyle = {
     borderBottom: '1px solid #E0E0E0', // Add bottom border for the expanded state
 };
 
-const Filters = () => {
+
+const Filters = ({ onPriceChange, onTimeChange }) => {
     const [price, setPrice] = useState([50, 1200]);
     const [time, setTime] = useState([0, 24]);
 
     const handlePriceChange = (event, newValue) => {
         setPrice(newValue);
+       
+        
+    };
+
+    const handlePriceChangeCommitted = (event, newValue) => {
+         // Giá trị cuối cùng sau khi thả chuột
+        onPriceChange(newValue); 
     };
 
     const handleTimeChange = (event, newValue) => {
         setTime(newValue);
+       
+    };
+
+    const handleTimeChangeCommitted = (event, newValue) => {
+         // Giá trị cuối cùng sau khi thả chuột
+        onTimeChange(newValue); 
     };
 
     return (
         <div className="filters" style={{ marginRight: '25px', backgroundColor: '#FAFBFC', padding: '16px', borderRadius: '8px' }}>
-            <Typography variant="h6" style={{fontWeight:'bold'}}>Filters</Typography>
+            <Typography variant="h6" style={{ fontWeight: 'bold' }}>Filters</Typography>
 
             {/* Price Filter */}
             <Accordion style={removeBorderOfFilterItem} defaultExpanded>
@@ -70,11 +84,12 @@ const Filters = () => {
                 <AccordionDetails style={accordionDetailsStyle}>
                     <Slider
                         value={price}
+                        onChangeCommitted={handlePriceChangeCommitted}
                         onChange={handlePriceChange}
                         valueLabelDisplay="auto"
                         min={50}
                         max={1200}
-                        marks={[{ value: 50, label: '$50' }, { value: 1200, label: '$1200' }]}
+                        marks={[{ value: 50, label: '50k' }, { value: 1200, label: '1200k' }]}
                         sx={rangeSliderStyle}
                     />
                 </AccordionDetails>
@@ -89,11 +104,12 @@ const Filters = () => {
                     <Slider
                         value={time}
                         onChange={handleTimeChange}
+                        onChangeCommitted={handleTimeChangeCommitted}
                         valueLabelDisplay="auto"
                         min={0}
                         max={24}
                         marks={[{ value: 0, label: '12:01 AM' }, { value: 24, label: '11:56 PM' }]}
-                        sx={rangeSliderStyle}                        
+                        sx={rangeSliderStyle}
                     />
                 </AccordionDetails>
             </Accordion>
@@ -106,7 +122,7 @@ const Filters = () => {
                 <AccordionDetails style={accordionDetailsStyle}>
                     <Box display="flex" justifyContent="space-between" >
                         {[0, 1, 2, 3, 4].map((rating) => (
-                            <Button 
+                            <Button
                                 variant="outlined"
                                 key={rating}
                                 size="small" // Adjust the size here
@@ -119,7 +135,7 @@ const Filters = () => {
                                     width: 'auto', // Let the button width adjust to content
                                     minWidth: '40px', // Set a minimum width if needed
                                     textAlign: 'center' // 
-                            }}>
+                                }}>
                                 {rating}+
                             </Button>
                         ))}
@@ -129,5 +145,4 @@ const Filters = () => {
         </div>
     );
 };
-
-export default Filters;
+export { Filters };

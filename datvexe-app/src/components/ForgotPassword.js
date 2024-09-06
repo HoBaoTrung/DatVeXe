@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { TextField, Button, Link } from '@mui/material';
+import { TextField, Button } from '@mui/material';
 import logo from '../assets/account-flow-icon.png';
 import forgotPasswordBackground from '../assets/account-flow-background.png'; // Adjust this path accordingly
 import { Image } from 'react-bootstrap';
 import facebookIcon from '../assets/facebook-login-icon.png';
 import googleIcon from '../assets/google-login-icon.png';
 import appleIcon from '../assets/apple-login-icon.png';
+import { Link, useNavigate } from 'react-router-dom';
+import Apis, { endpoint } from '../configs/Apis';
 
 // Inline styles
 const styles = {
@@ -128,7 +130,7 @@ const styles = {
 function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
-
+  const nav = useNavigate();
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
     // Clear error when user starts typing
@@ -137,7 +139,7 @@ function ForgotPassword() {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
       setEmailError('Please enter a valid email address.');
@@ -145,6 +147,19 @@ function ForgotPassword() {
       setEmailError('');
       // Handle valid email submission
       console.log('Email submitted:', email);
+
+      try {
+        let res = await Apis.post(endpoint['forgotPassword'], { email })
+       console.info(res.status)
+        if (res.status === 200) {nav('/login')}
+        
+        else { setEmailError(res.data) }
+
+
+      } catch (error) {
+        console.log(error.response)
+      }
+
     }
   };
 
@@ -154,7 +169,7 @@ function ForgotPassword() {
         {/* Form Section */}
         <div style={styles.formContainer}>
           <Image src={logo} />
-          <Link href="/log-in" style={styles.backToLogin}>
+          <Link to="/login" style={styles.backToLogin}>
             &lt; Back to login
           </Link>
           <div style={styles.title}>Forgot your password?</div>

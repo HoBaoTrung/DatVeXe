@@ -27,6 +27,7 @@ import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -54,6 +55,7 @@ public class Trip implements Serializable {
     @NotNull
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
     private Date createdAt;
     @Basic(optional = false)
     @NotNull

@@ -35,4 +35,6 @@ public interface UserService extends UserDetailsService {
     boolean authUser(String username, String password);
     
     public User getUserById(long id);
+    
+    public void changePassword(User u);
 }

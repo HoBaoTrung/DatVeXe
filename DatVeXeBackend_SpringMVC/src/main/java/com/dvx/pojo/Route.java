@@ -58,7 +58,7 @@ public class Route implements Serializable {
     @Size(min = 1, max = 255)
     @Column(name = "name")
     private String name;
-    @Basic(optional = false)
+   
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd-MM-yyyy")
@@ -109,7 +109,10 @@ public class Route implements Serializable {
         return createdAt;
     }
 
-    public void setCreatedAt() {
+    public void setCreatedAt(Date d) {
+        
+        if(d==null) {
+        
         // Lấy ngày giờ hiện tại theo múi giờ hệ thống
         LocalDateTime localDateTime = LocalDateTime.now();
         
@@ -118,7 +121,8 @@ public class Route implements Serializable {
         
         // Chuyển ZonedDateTime sang java.util.Date
         Date date = Date.from(zonedDateTime.toInstant());
-        this.createdAt = date;
+        this.createdAt = date;}
+        else  this.createdAt = d;
     }
 
     public Double getRoutePrice() {

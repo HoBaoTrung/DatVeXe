@@ -1,51 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../layout/Header';
 import Footer from '../layout/Footer';
 import TripCard from './TripCard';
 import SearchForm from './SearchForm';
-import Filters from './Filter';
+import { Filters } from './Filter';
 import SortTab from './SortTab';
 import { Typography, Button } from '@mui/material';
 import { useLocation } from 'react-router-dom';
-import axios from 'axios';
+import Apis, { endpoint } from '../configs/Apis';
 
-const trips = [
-    {
-        carLogo: '../assets/bus-image.jpg',
-        carName: 'Emirates',
-        price: '$104',
-        departureTime: '9:00 PM',
-        arrivalTime: '01:28 PM',
-        duration: '2h 28m'
-    },
-    {
-        carLogo: '../assets/bus-image.jpg',
-        carName: 'Flydubai',
-        price: '$104',
-        departureTime: '10:00 PM',
-        arrivalTime: '01:28 PM',
-        duration: '2h 28m'
-    },
-    {
-        carLogo: '../assets/bus-image.jpg',
-        carName: 'Qatar',
-        price: '$104',
-        departureTime: '12:00 PM',
-        arrivalTime: '03:28 PM',
-        duration: '2h 28m'
-    },
-    {
-        carLogo: '../assets/bus-image.jpg',
-        carName: 'Etihad',
-        price: '$104',
-        departureTime: '3:00 PM',
-        arrivalTime: '05:28 PM',
-        duration: '2h 28m'
-    },
-    // Add more trips here if needed
-];
+
+const trips = [];
 
 const TripList = ({ tripsToShow }) => {
+    console.log(trips)
     return (
         <div className="flights-list">
             {tripsToShow.map((trip, index) => (
@@ -56,7 +23,7 @@ const TripList = ({ tripsToShow }) => {
 };
 
 const MainPage = () => {
-    const [provinces, setProvinces] = useState([]);
+
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);
 
@@ -68,26 +35,54 @@ const MainPage = () => {
     const tripsPerPage = 3;
     const [showMore, setShowMore] = useState(false);
     const displayedTrips = trips.slice(0, tripsPerPage);
-    const totalTrips = trips.length;
+   
+    const [totalTrips, setTotalTrips] = useState(trips.length);
     const tripsToShow = showMore ? trips : displayedTrips;
 
+    const [price, setPrice] = useState([50, 1200]);
+    const [time, setTime] = useState([0, 24]);
+
+
+    // Hàm để nhận giá trị price từ Filters
+    const handlePriceChange = (newPrice) => {
+        setPrice(newPrice);
+    };
+
+    // Hàm để nhận giá trị time từ Filters
+    const handleTimeChange = (newTime) => {
+        setTime(newTime);
+    };
+
+    const loadTrip = async () => {
+        let form = new FormData()
+        form.append("fromProvince", fromProvince)
+        form.append("toProvince", toProvince)
+        form.append("departureDate", departureDate)
+        form.append("time", time)
+        form.append("price", price)
+        try {
+            let res = await Apis.post(endpoint['trip'], form)
+            trips.length = 0; // Xóa toàn bộ nội dung mảng hiện tại
+            trips.push(...res.data); // Thêm phần tử mới vào mảng trips
+           
+            setTotalTrips(trips.length)
+            
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
     useEffect(() => {
-        window.scrollTo(0, 0);
-        axios.get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
-            .then(response => {
-                const data = response.data;
-                const provincesList = data.map(item => ({
-                    code: item.Id,
-                    name: item.Name
-                }));
-                setProvinces(provincesList);
-            })
-            .catch(error => console.error('Error fetching provinces:', error));
-    }, []);
+        window.scrollTo(0, 700);
+        loadTrip()
+
+    }, [fromProvince, toProvince, departureDate, time, price]);
+
 
     return (
         <div style={{ backgroundColor: '#FAFBFC', fontFamily: 'Montserrat, sans-serif' }}>
-          
+
             <div style={{ backgroundColor: '#FAFBFC', margin: '0 100px 100px 100px' }}>
                 <SearchForm
                     style={{ marginTop: '50px' }}
@@ -95,10 +90,11 @@ const MainPage = () => {
                     initialToProvince={toProvince}
                     initialDepartureDate={departureDate}
                     initialNumberOfTickets={numberOfTickets}
+
                 />
                 <div className="main-content" style={{ display: 'flex', marginTop: '20px', fontFamily: 'Montserrat, sans-serif', color: '#112211' }}>
                     <div className="filters-container" style={{ width: '25%' }}>
-                        <Filters />
+                        <Filters onPriceChange={handlePriceChange} onTimeChange={handleTimeChange} />
                     </div>
                     <div style={{ border: '1px solid #112211', marginRight: '25px' }}></div>
                     <div className="flights-list-container" style={{ width: '75%' }}>

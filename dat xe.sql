@@ -11,7 +11,7 @@ insert into role values
 
 create table user(
  `id` bigint NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ,
   `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `first_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `last_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -31,7 +31,7 @@ create table user(
 );
 INSERT INTO `user` (`username`, `password`, `first_name`, `last_name`, `email`, `address`, `phonenumber`, `avatar`, `created_at`, `is_active`, `role_id`)
 VALUES 
-('nicholasharrington', '$2a$10$71E6n4s9RYAH/VamU.fJgO0czyA4.Z8X2gTrIHw4JBBCXqFsR3OBm', 'Patricia', 'Navarro', 'fernandolee@example.net', '123 Main St', '3714533435', 'https://cdn.dribbble.com/users/3367729/screenshots/6393911/db_minon.jpg?resize=400x300&vertical=center', '2024-04-16 21:51:04.695947', 1, 3),
+('nicholasharrington', '$2a$10$5X9k5N1sTc1/CjVH5XJoje3QMYijH3ETpgkox00R0MdPaJPPrf7wO', 'Patricia', 'Navarro', 'fernandolee@example.net', '123 Main St', '3714533435', 'https://cdn.dribbble.com/users/3367729/screenshots/6393911/db_minon.jpg?resize=400x300&vertical=center', '2024-04-16 21:51:04.695947', 1, 3),
 ('allisonpeterson', '$2a$10$71E6n4s9RYAH/VamU.fJgO0czyA4.Z8X2gTrIHw4JBBCXqFsR3OBm', 'Christine', 'Collins', 'taylorclark@example.org', '456 Elm St', '0019913760', 'https://cdn.dribbble.com/users/3367729/screenshots/6393911/db_minon.jpg?resize=400x300&vertical=center', '2024-04-16 21:51:04.695947', 1, 3),
 ('jonathanalvarez', '$2a$10$71E6n4s9RYAH/VamU.fJgO0czyA4.Z8X2gTrIHw4JBBCXqFsR3OBm', 'Jessica', 'Miller', 'kevin53@example.com', '789 Oak St', '8762074072', 'https://cdn.dribbble.com/users/3367729/screenshots/6393911/db_minon.jpg?resize=400x300&vertical=center', '2024-04-16 21:51:04.695947', 1, 3),
 ('jeffrey59', '$2a$10$71E6n4s9RYAH/VamU.fJgO0czyA4.Z8X2gTrIHw4JBBCXqFsR3OBm', 'Jessica', 'Day', 'cantubob@example.com', '159 Maple St', '5475408441', 'https://cdn.dribbble.com/users/3367729/screenshots/6393911/db_minon.jpg?resize=400x300&vertical=center', '2024-04-16 21:51:04.695947', 1, 3),
@@ -82,7 +82,7 @@ VALUES
 ('toddsimmons', '$2a$10$71E6n4s9RYAH/VamU.fJgO0czyA4.Z8X2gTrIHw4JBBCXqFsR3OBm', 'Destiny', 'Foster', 'obrientyler@example.com', '987 Oak St', '8982940645', 'https://cdn.dribbble.com/users/3367729/screenshots/6393911/db_minon.jpg?resize=400x300&vertical=center', '2024-04-16 21:51:04.695947', 1, 3),
 ('unewman', '$2a$10$71E6n4s9RYAH/VamU.fJgO0czyA4.Z8X2gTrIHw4JBBCXqFsR3OBm', 'Ryan', 'Castaneda', 'shellyrodriguez@example.net', '654 Birch St', '5506808625', 'https://cdn.dribbble.com/users/3367729/screenshots/6393911/db_minon.jpg?resize=400x300&vertical=center', '2024-04-16 21:51:04.695947', 1, 1),
 ('teresa62', '$2a$10$71E6n4s9RYAH/VamU.fJgO0czyA4.Z8X2gTrIHw4JBBCXqFsR3OBm', 'Melody', 'Singh', 'qhuffman@example.org', '789 Oak St', '7632653958', 'https://cdn.dribbble.com/users/3367729/screenshots/6393911/db_minon.jpg?resize=400x300&vertical=center', '2024-04-16 21:51:04.695947', 1, 3),
-('admin', '$2a$10$W5ahQHTwloyerl1HM0FHCetpzVQMzCDYF299FJ7thUpdFOftFqESi', '', '', 'admin@example.com', '753 Birch St', NULL, NULL, '2024-04-16 21:51:04.695947', 1, 2);
+('admin', '$2a$10$5X9k5N1sTc1/CjVH5XJoje3QMYijH3ETpgkox00R0MdPaJPPrf7wO', '', '', 'admin@example.com', '753 Birch St', NULL, NULL, '2024-04-16 21:51:04.695947', 1, 2);
 
 create table `otp`(
 `id` bigint primary key NOT NULL AUTO_INCREMENT,
@@ -215,7 +215,7 @@ INSERT INTO `station` (`name`) VALUES ('Nhà Bè'), ('Quận 3'),('Quận 4'), (
 CREATE TABLE `route` (
   `id` bigint NOT NULL AUTO_INCREMENT,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `created_at` datetime(6) NOT NULL,
+  `created_at` datetime(6) not null,
   `from_station` bigint DEFAULT NULL,
   `to_station` bigint DEFAULT NULL,
   `route_price` double DEFAULT NULL,
@@ -345,7 +345,7 @@ BEGIN
     FROM trip
     WHERE id = NEW.trip_id;
 
-    -- Đặt giá trị expired_at bằng depart_at cộng thêm 1 giờ (hoặc tùy chỉnh khoảng thời gian)
+    -- Đặt giá trị expired_at bằng depart_at 
     SET NEW.expired_at = DATE_ADD(depart_time, INTERVAL 0 HOUR);
 END;
 

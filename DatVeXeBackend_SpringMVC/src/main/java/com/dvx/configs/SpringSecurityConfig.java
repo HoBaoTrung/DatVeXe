@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Properties;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.Order;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -71,30 +74,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return new SimpleDateFormat("yyyy-MM-dd");
     }
 
-    //dang lam
-//    @Bean
-//    public JavaMailSender gmailSender() {
-//        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-//        mailSender.setHost("smtp.gmail.com");
-//        mailSender.setPort(587);
-//        mailSender.setUsername("trungh7430@gmail.com");
-//        mailSender.setPassword("capd nruj nclr atnu");
-//
-//        Properties javaMailProperties = new Properties();
-//        javaMailProperties.put("mail.smtp.starttls.enable", "true");
-//        javaMailProperties.put("mail.smtp.auth", "true");
-//        javaMailProperties.put("mail.transport.protocol", "smtp");
-//        javaMailProperties.put("mail.debug", "true");
-//
-//        mailSender.setJavaMailProperties(javaMailProperties);
-////        Session session = Session.getInstance(mailSender.getJavaMailProperties(),
-////                new javax.mail.Authenticator() {
-////            protected PasswordAuthentication getPasswordAuthentication() {
-////                return new PasswordAuthentication("trungh7430@gmail.com","capd nruj nclr atnu");
-////            }
-////        });
-//        return mailSender;
-//    }
+    
+    
     @Override
     protected void configure(AuthenticationManagerBuilder auth)
             throws Exception {

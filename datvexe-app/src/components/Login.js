@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { TextField, Button, Checkbox, FormControlLabel, Link, IconButton } from '@mui/material';
+import { TextField, Button, Checkbox, FormControlLabel, IconButton } from '@mui/material';
 import logo from '../assets/account-flow-icon.png';
 import loginBackground from '../assets/account-flow-background.png'; // Đảm bảo đường dẫn đúng
 import { Image } from 'react-bootstrap';
@@ -11,8 +11,9 @@ import appleIcon from '../assets/apple-login-icon.png';
 import Apis, { endpoint } from '../configs/Apis';
 import cookie from "react-cookies";
 import { MyUserContext } from "../App";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Spinner from '../layout/Spinner';
+import { hover } from '@testing-library/user-event/dist/hover';
 
 // Inline styles
 const styles = {
@@ -220,7 +221,6 @@ function App() {
           "email": email,
           "password": password
         });
-
         cookie.save("user", res.data.userDetails);
         cookie.save("token", res.data.accessToken);
         dispatch({
@@ -231,7 +231,7 @@ function App() {
 
       } catch (error) {
         setLoading(false)
-        alert("Sai email hoặc mật khẩu")
+        setPasswordError("Sai email hoặc mật khẩu")
 
       }
 
@@ -288,7 +288,8 @@ function App() {
               label="Remember me"
               style={styles.rememberMe}
             />
-            <Link href="/forgot-password" style={styles.forgotPassword}>Forgot Password</Link>
+            
+           <Link to="/forgotPassword" style={styles.forgotPassword}>Forgot Password</Link>
           </div>
           
           {loading == true ?

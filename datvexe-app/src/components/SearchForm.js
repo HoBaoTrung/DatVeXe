@@ -12,15 +12,15 @@ import {
 } from '@mui/material';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import SearchIcon from '@mui/icons-material/Search';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
 
-const SearchForm = ({ 
-    style, 
-    initialFromProvince = '', 
-    initialToProvince = '', 
-    initialDepartureDate = '', 
-    initialNumberOfTickets = 1 
+import { useNavigate } from 'react-router-dom';
+import Apis, { endpoint } from '../configs/Apis';
+const SearchForm = ({
+    style,
+    initialFromProvince = '',
+    initialToProvince = '',
+    initialDepartureDate = '',
+    initialNumberOfTickets = 1
 }) => {
     const [provinces, setProvinces] = useState([]);
     const [fromProvince, setFromProvince] = useState(initialFromProvince);
@@ -28,6 +28,7 @@ const SearchForm = ({
     const [today, setToday] = useState(initialDepartureDate);
     const [numberOfTickets, setNumberOfTickets] = useState(initialNumberOfTickets);
     const navigate = useNavigate();
+
 
     const getCurrentDate = () => {
         const now = new Date();
@@ -48,26 +49,34 @@ const SearchForm = ({
         navigate(`/search?${searchParams}`);
     };
 
-    useEffect(() => {
-        axios.get('https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json')
-            .then(response => {
-                const data = response.data;
-                const provincesList = data.map(item => ({
-                    code: item.Id,
-                    name: item.Name
-                }));
-                setProvinces(provincesList);
-            })
-            .catch(error => console.error('Error fetching provinces:', error));
-    }, []);
+
 
     useEffect(() => {
-        setToday(getCurrentDate());
+        const fetchData = async () => {
+            let { data } = await Apis.get(endpoint['station'])
+
+            const provincesList = data.map(item => ({
+                code: item.id,
+                name: item.name
+            }));
+            setProvinces(provincesList);
+        }
+        fetchData();
+    }, []);
+
+
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(window.location.search);
+
+        const departureDate = searchParams.get('departureDate');
+     
+        setToday(departureDate||getCurrentDate);
     }, []);
 
     return (
         <Container maxWidth="lg" style={{ borderRadius: '15px', padding: '25px 15px', backgroundColor: 'white', ...style }}>
-           
+
             <Grid container spacing>
                 <Grid item xs={12}>
                     <Grid container spacing>
@@ -117,7 +126,7 @@ const SearchForm = ({
                                     type="date"
                                     InputProps={{
                                         inputProps: {
-                                            min: today,
+                                            min: getCurrentDate(),
                                         },
                                     }}
                                     InputLabelProps={{

@@ -4,6 +4,7 @@
  */
 package com.dvx.APIs;
 
+import com.dvx.dto.TripDTO;
 import com.dvx.pojo.Route;
 import com.dvx.pojo.Trip;
 import com.dvx.services.RouteService;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -34,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin
-public class APIStripController {
+public class APITripController {
 
     @Autowired
     private RouteService r;
@@ -45,25 +47,19 @@ public class APIStripController {
     @Autowired
     private SimpleDateFormat f;
 
-    @GetMapping(path = "/trip/")
+    @PostMapping(path = "/public/trip/")
     @CrossOrigin
-    public ResponseEntity<List<Trip>> list(
+    public ResponseEntity<List<?>> list(
             @RequestParam Map<String, String> params) throws ParseException {
         
-        Calendar calendar = Calendar.getInstance();
-        
-        calendar.setTime(f.parse(params.get("date")));
-         
-        Route route = this.r.findRoute(params);
-        List<Trip>  result = this.trip.findTripByRoute(route, calendar);
-       
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<>(trip.getAllTrip(params), HttpStatus.OK);
+
     }
-    
+
     @DeleteMapping("/deleteTrip/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable(value = "id") long id) {
-       
+
         this.trip.deleteTrip(id);
     }
 

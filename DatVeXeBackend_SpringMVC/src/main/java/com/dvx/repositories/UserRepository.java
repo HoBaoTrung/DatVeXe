@@ -24,4 +24,5 @@ public interface UserRepository {
     boolean authUser(String username, String password);
     public boolean isPhoneExist(String phone);
     boolean existsByFirstNameAndLastName(String firstname, String lastname);
+    
 }

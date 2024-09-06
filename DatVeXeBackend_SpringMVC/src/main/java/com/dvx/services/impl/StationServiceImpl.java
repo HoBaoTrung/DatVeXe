@@ -26,4 +26,9 @@ public class StationServiceImpl implements StationService {
         return this.stationRepository.getStations();
     }
 
+    @Override
+    public Station getStationsByID(long id) {
+        return this.stationRepository.getStationsByID(id);
+    }
+
 }

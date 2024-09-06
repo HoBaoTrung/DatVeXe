@@ -4,14 +4,16 @@
  */
 package com.dvx.services;
 
-import com.dvx.pojo.Station;
+import com.dvx.repositories.*;
+import com.dvx.pojo.User;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author ASUS
  */
-public interface StationService {
-    public List<Station> getStations();
-    public Station getStationsByID(long id);
+public interface EmailService {
+   void sendEmailForgotPassword(String email, String newPass);
+    
 }

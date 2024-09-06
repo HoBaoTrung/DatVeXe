@@ -50,7 +50,7 @@ public class TripServiceImpl implements TripService {
     }
 
     @Override
-    public List<Trip> getAllTrip(Map<String, String> params) {
+    public List<?> getAllTrip(Map<String, String> params) {
         return this.trip.getAllTrip(params);
     }
 

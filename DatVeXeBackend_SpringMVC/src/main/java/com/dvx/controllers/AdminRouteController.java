@@ -59,17 +59,21 @@ public class AdminRouteController {
     @PostMapping("/routeDetail/{id}")
     public String updateRouteDetail(Model model, @ModelAttribute(value = "route") @Valid Route route,
             @PathVariable(value = "id") long id, BindingResult result) {
-        if (!this.routeSer.addOrUpdateRoute(route)) {
-            model.addAttribute("err", "Cập nhật thất bại!");
-            model.addAttribute("route", this.routeSer.findById(id));
-            return "routeDetail";
+        Route r = this.routeSer.findById(route.getId());
+        route.setCreatedAt(r.getCreatedAt());
+        if (!result.hasErrors()) {
+            if (!this.routeSer.addOrUpdateRoute(route)) {
+                model.addAttribute("err", "Cập nhật thất bại!");
+                model.addAttribute("route", this.routeSer.findById(id));
+                return "routeDetail";
+            }
         }
-        System.out.println(route);
         return "redirect:/admin/routeDetail/" + id;
     }
-    
+
     @GetMapping("/routeDetail")
-    public String getAddDetail(Model model) {
+    public String getAddDetail(Model model
+    ) {
         model.addAttribute("route", new Route());
         model.addAttribute("stations", this.stationSer.getStations());
         return "routeDetail";
@@ -77,13 +81,13 @@ public class AdminRouteController {
 
     @PostMapping("/routeDetail")
     public String addRoute(Model model, @ModelAttribute(value = "route") @Valid Route route,
-           BindingResult result) {
-        route.setCreatedAt();
+            BindingResult result
+    ) {
+        route.setCreatedAt(null);
         if (result.hasErrors()) {
-            System.out.println(132);
-            System.out.println(result);
+          
             model.addAttribute("route", new Route());
-           model.addAttribute("stations", this.stationSer.getStations());
+            model.addAttribute("stations", this.stationSer.getStations());
             return "routeDetail";
         }
         if (!this.routeSer.addOrUpdateRoute(route)) {
@@ -92,7 +96,7 @@ public class AdminRouteController {
             return "routeDetail";
         }
         System.out.println(route);
-        return "redirect:/admin/route" ;
+        return "redirect:/admin/route";
     }
 
 }

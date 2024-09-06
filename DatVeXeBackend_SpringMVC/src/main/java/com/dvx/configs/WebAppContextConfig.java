@@ -7,6 +7,7 @@ package com.dvx.configs;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.dvx.formatter.*;
+import java.util.Properties;
 import java.util.Set;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.MessageSource;
@@ -18,6 +19,8 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.type.filter.AssignableTypeFilter;
 import org.springframework.format.Formatter;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -105,5 +108,24 @@ public class WebAppContextConfig implements WebMvcConfigurer {
                         "api_secret", "dyQEMyFtYPcVU-7nrdVaa4MUF7c",
                         "secure", true));
         return cloudinary;
+    }
+    
+    @Bean
+    public JavaMailSender gmailSender() {
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+        mailSender.setUsername("trungh7430@gmail.com");
+        mailSender.setPassword("bypv mcta gabf datq");
+
+        Properties javaMailProperties = new Properties();
+        javaMailProperties.put("mail.smtp.starttls.enable", "true");
+        javaMailProperties.put("mail.smtp.auth", "true");
+        javaMailProperties.put("mail.transport.protocol", "smtp");
+        javaMailProperties.put("mail.debug", "true");
+
+        mailSender.setJavaMailProperties(javaMailProperties);
+
+        return mailSender;
     }
 }

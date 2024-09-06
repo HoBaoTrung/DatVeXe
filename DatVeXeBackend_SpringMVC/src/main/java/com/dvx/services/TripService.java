@@ -17,7 +17,7 @@ import java.util.Map;
  */
 public interface TripService {
 
-    public List<Trip> getAllTrip(Map<String, String> params);
+    public List<?> getAllTrip(Map<String, String> params);
 
     public Long countTrip();
 

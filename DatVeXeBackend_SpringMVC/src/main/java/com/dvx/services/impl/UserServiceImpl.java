@@ -89,6 +89,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void changePassword(User u) {
+        u.setPassword(this.passwordEncoder.encode(u.getPassword()));
+
+        this.userRepository.addOrUpdateUser(u);
+    }
+
+    @Override
     public boolean addOrUpdateUser(User user) {
         Map<String, String> errors = validateUser(user);
         if (!errors.isEmpty()) {

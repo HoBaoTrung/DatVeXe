@@ -12,5 +12,6 @@ import java.util.List;
  * @author ASUS
  */
 public interface StationRepository {
- public List<Station> getStations();   
+ public List<Station> getStations(); 
+ public Station getStationsByID(long id);
 }
