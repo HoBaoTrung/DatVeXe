@@ -9,6 +9,8 @@ export const endpoint={
     'trip-detail':(tripId) =>`${SERVER_CONTEXT}/api/public/tripDetail/${tripId}`,
 
     //kiểm tra đăng nhập trước khi gọi api này
+    'get-orders':`${SERVER_CONTEXT}/api/viewOrders`,
+    'get-tickets':(orderID) =>`${SERVER_CONTEXT}/api/viewTicket/${orderID}`,
     'add-order':(tripId) =>`${SERVER_CONTEXT}/api/addOrder/${tripId}`,
     'check-payment':`${SERVER_CONTEXT}/api/checkPaySuccess`,
     
