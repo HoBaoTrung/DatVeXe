@@ -1,6 +1,7 @@
 package com.dvx.dto;
 
 
+import com.dvx.pojo.Seat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.Serializable;
+import java.util.Set;
 
 @Data
 @Builder
@@ -22,4 +24,5 @@ public class TripDTO implements Serializable {
     private String price;
     private String departureTime;
     private String departureDate;
+    private Set<Seat> setSeat;
 }

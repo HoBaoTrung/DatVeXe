@@ -5,12 +5,14 @@
 package com.dvx.APIs;
 
 import com.dvx.dto.TripDTO;
+import com.dvx.mapper.TripDTOMapper;
 import com.dvx.pojo.Route;
 import com.dvx.pojo.Trip;
 import com.dvx.services.RouteService;
 import com.dvx.services.TripService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -45,16 +47,37 @@ public class APITripController {
     private TripService trip;
 
     @Autowired
+    private TripDTOMapper mapper;
+
+    @Autowired
     private SimpleDateFormat f;
 
     @PostMapping(path = "/public/trip/")
     @CrossOrigin
     public ResponseEntity<List<?>> list(
             @RequestParam Map<String, String> params) throws ParseException {
-        
+
         return new ResponseEntity<>(trip.getAllTrip(params), HttpStatus.OK);
 
     }
+
+    //hiển thị thông tin chi tiết chuyến xe
+    @GetMapping("/public/tripDetail/{id}")
+    @CrossOrigin
+    public ResponseEntity<?> tripDetail(
+            @PathVariable(value = "id") long tripid) throws ParseException {
+        List<Object> res = new ArrayList<>();
+        Trip t = trip.getTripbyID(tripid);
+        TripDTO tripdto = mapper.apply(t);
+        res.add(tripdto);
+        //Các ghế đã có người mua của chuyến đi
+        res.add(trip.getTicketsBought(t));
+       
+        return new ResponseEntity<>(res, HttpStatus.OK);
+
+    }
+    
+    
 
     @DeleteMapping("/deleteTrip/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

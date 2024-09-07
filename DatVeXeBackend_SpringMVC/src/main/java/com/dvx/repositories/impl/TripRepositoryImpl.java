@@ -6,8 +6,10 @@ package com.dvx.repositories.impl;
 
 import com.dvx.dto.TripDTO;
 import com.dvx.mapper.TripDTOMapper;
+import com.dvx.pojo.Orders;
 import com.dvx.pojo.Route;
 import com.dvx.pojo.Station;
+import com.dvx.pojo.Ticket;
 import com.dvx.pojo.Trip;
 import com.dvx.repositories.TripRepository;
 import com.dvx.services.StationService;
@@ -64,20 +66,6 @@ public class TripRepositoryImpl implements TripRepository {
         }
         String[] parts = input.split("\\s*,\\s*"); // Tách chuỗi theo dấu phẩy, bỏ khoảng trắng
         return parts; // Chuyển mảng thành danh sách
-    }
-
-    @Override
-    public List<Trip> findTripByRoute(Route r, Calendar d) {
-
-        Session session = Factory.getObject().getCurrentSession();
-
-        Query query = session.createQuery("FROM Trip  where routeId=:a and YEAR(departAt)=:y and MONTH(departAt)=:m "
-                + "and DAY(departAt)=:d");
-        query.setParameter("a", r);
-        query.setParameter("y", d.get(Calendar.YEAR));
-        query.setParameter("m", d.get(Calendar.MONTH) + 1);
-        query.setParameter("d", d.get(Calendar.DATE));
-        return query.getResultList();
     }
 
     @Override
@@ -144,7 +132,7 @@ public class TripRepositoryImpl implements TripRepository {
                 } catch (ParseException e) {
                     e.printStackTrace();  // Bắt lỗi nếu ngày không đúng định dạng
                 }
-                
+
                 predicates.add(builder.equal(builder.function("date", Date.class, rootTrip.get("departAt")), departDate));
             }
 
@@ -216,6 +204,24 @@ public class TripRepositoryImpl implements TripRepository {
             ex.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public List<Long> getTicketsBought(Trip t) {
+        Session session = Factory.getObject().getCurrentSession();
+
+//        CriteriaBuilder builder = session.getCriteriaBuilder();
+//        CriteriaQuery<Trip> query = builder.createQuery(Trip.class);
+//        Root<Trip> rootTrip = query.from(Trip.class);
+//        query.orderBy(builder.desc(rootTrip.get("id")));
+        String hql = "SELECT s.id FROM Trip t "
+                + "JOIN t.ticketSet tk "
+                + "JOIN tk.seatId s "
+                + "WHERE t.id = :tripId";
+        Query q = session.createQuery(hql, Long.class);
+        q.setParameter("tripId", t.getId());
+
+        return q.getResultList();
     }
 
 }

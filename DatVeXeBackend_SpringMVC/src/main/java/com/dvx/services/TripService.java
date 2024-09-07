@@ -16,14 +16,12 @@ import java.util.Map;
  * @author ASUS
  */
 public interface TripService {
-
+    public List<Long> getTicketsBought(Trip t);
     public List<?> getAllTrip(Map<String, String> params);
 
     public Long countTrip();
 
     public Trip getTripbyID(long id);
-
-    public List<Trip> findTripByRoute(Route r, Calendar d);
 
     public boolean addOrUpdateTrip(Trip p) throws Exception;
 

@@ -6,6 +6,8 @@ package com.dvx.services;
 
 import com.dvx.pojo.Orders;
 import com.dvx.pojo.Ticket;
+import com.dvx.pojo.Trip;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,6 +19,6 @@ public interface TicketService {
     public Ticket getById(long id);
     public List<Ticket> getByOrder(Orders o);
     boolean deleteTicket(long id);
-
     boolean addOrUpdateTicket(Ticket u);
+    public void updatePaymentTicket(Long orderId, Date paymentDate);
 }

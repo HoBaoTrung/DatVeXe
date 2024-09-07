@@ -98,9 +98,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean addOrUpdateUser(User user) {
         Map<String, String> errors = validateUser(user);
-        if (!errors.isEmpty()) {
-            throw new ValidationException(errors);
-        }
+//        if (!errors.isEmpty()) {
+//            throw new ValidationException(errors);
+//        }
 
         if (user.getFile() != null) {
             if (!user.getFile().isEmpty())

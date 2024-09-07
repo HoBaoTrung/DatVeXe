@@ -17,10 +17,11 @@ import java.util.Map;
  * @author ASUS
  */
 public interface TripRepository {
-    public List<Trip> findTripByRoute(Route r, Calendar d);
+   
     public List<?> getAllTrip(Map<String, String> params);
     public Long countTrip();
     public Trip getTripbyID(long id);
     public boolean addOrUpdateTrip(Trip t);
     public boolean deleteTrip(long t);
+    public List<Long> getTicketsBought(Trip t);
 }

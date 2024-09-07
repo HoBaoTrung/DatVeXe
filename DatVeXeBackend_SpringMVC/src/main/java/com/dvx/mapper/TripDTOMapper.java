@@ -20,6 +20,8 @@ public class TripDTOMapper implements Function<Trip, TripDTO> {
         
         timeFormat = new SimpleDateFormat("dd/MM/yyyy");
         String date=timeFormat.format(t.getDepartAt());
+        
+        
         return TripDTO.builder()
                 .id(t.getId())
                 .carImage(t.getCarId().getImage())
@@ -28,6 +30,7 @@ public class TripDTOMapper implements Function<Trip, TripDTO> {
                 .price(t.getPrice() + "")
                 .nameCarType(t.getCarId().getTypeId().getName())
                 .carNumber(t.getCarId().getCarNumber())
+                .setSeat(t.getCarId().getSeatSet())
                 .build();
     }
     

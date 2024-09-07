@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -50,7 +51,8 @@ public class Seat implements Serializable {
     @Column(name = "code")
     private String code;
     @JoinColumn(name = "car_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Car carId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "seatId")
     @JsonIgnore

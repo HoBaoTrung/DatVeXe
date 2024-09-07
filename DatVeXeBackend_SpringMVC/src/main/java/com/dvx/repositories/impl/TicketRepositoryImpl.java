@@ -6,8 +6,10 @@ package com.dvx.repositories.impl;
 
 import com.dvx.pojo.Orders;
 import com.dvx.pojo.Ticket;
+import com.dvx.pojo.Trip;
 import com.dvx.repositories.TicketRepository;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -91,6 +93,15 @@ public class TicketRepositoryImpl implements TicketRepository {
         query.where(predicates.toArray(new Predicate[0]));
         Query q = s.createQuery(query);
         return q.getResultList();
+    }
+
+    @Override
+    public void updatePaymentTicket(Long orderId, Date paymentDate) {
+        Session session = this.sessionFactoryBean.getObject().getCurrentSession();
+        String hql = "UPDATE Ticket t SET t.paidAt = :paymentDate WHERE t.orderId.id = :orderId";
+        int updatedEntities = session.createQuery(hql)
+                .setParameter("paymentDate", paymentDate)
+                .setParameter("orderId", orderId).executeUpdate();
     }
 
 }

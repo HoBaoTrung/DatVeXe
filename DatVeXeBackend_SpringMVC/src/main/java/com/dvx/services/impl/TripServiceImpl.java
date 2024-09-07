@@ -43,11 +43,6 @@ public class TripServiceImpl implements TripService {
     @Autowired
     private RouteRepository routeRepo;
 
-    @Override
-    public List<Trip> findTripByRoute(Route r, Calendar d) {
-
-        return this.trip.findTripByRoute(r, d);
-    }
 
     @Override
     public List<?> getAllTrip(Map<String, String> params) {
@@ -110,5 +105,9 @@ public class TripServiceImpl implements TripService {
     public boolean deleteTrip(long t) {
         return this.trip.deleteTrip(t);
     }
+
+    @Override
+    public List<Long> getTicketsBought(Trip t) {
+    return this.trip.getTicketsBought(t);}
 
 }

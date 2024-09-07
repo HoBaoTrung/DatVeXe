@@ -6,6 +6,8 @@ package com.dvx.repositories;
 
 import com.dvx.pojo.Orders;
 import com.dvx.pojo.Ticket;
+import com.dvx.pojo.Trip;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ import java.util.Map;
 public interface TicketRepository {
     public Ticket getById(long id);
      public List<Ticket> getByOrder(Orders id);
+     void updatePaymentTicket(Long orderId, Date paymentDate);
     boolean deleteTicket(long id);
     boolean addOrUpdateTicket(Ticket u);
 }

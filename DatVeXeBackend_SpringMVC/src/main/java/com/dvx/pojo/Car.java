@@ -4,10 +4,14 @@
  */
 package com.dvx.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
@@ -63,6 +68,10 @@ public class Car implements Serializable {
     @JoinColumn(name = "type_seat_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private TypesSeat typeSeatId;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "carId", fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Seat> seatSet;
 
     @Transient
     private MultipartFile file;
@@ -165,6 +174,20 @@ public class Car implements Serializable {
      */
     public void setFile(MultipartFile file) {
         this.file = file;
+    }
+
+    /**
+     * @return the seatSet
+     */
+    public Set<Seat> getSeatSet() {
+        return seatSet;
+    }
+
+    /**
+     * @param seatSet the seatSet to set
+     */
+    public void setSeatSet(Set<Seat> seatSet) {
+        this.seatSet = seatSet;
     }
 
 }
