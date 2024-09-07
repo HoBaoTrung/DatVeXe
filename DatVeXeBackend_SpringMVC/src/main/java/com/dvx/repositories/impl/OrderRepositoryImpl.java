@@ -49,12 +49,26 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     @Override
+    public Orders getByUserAndId(User user, long id) {
+        Session s = this.sessionFactoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = s.getCriteriaBuilder();
+        CriteriaQuery<Orders> query = builder.createQuery(Orders.class);
+        Root<Orders> rootOrder = query.from(Orders.class);
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(builder.equal(rootOrder.get("customerId"), user));
+        predicates.add(builder.equal(rootOrder.get("id"), id));
+        query.where(predicates.toArray(Predicate[]::new));
+        Query q = s.createQuery(query);
+        return (Orders) q.getSingleResult();
+    }
+
+    @Override
     public List<Orders> getByUser(User id) {
         Session s = this.sessionFactoryBean.getObject().getCurrentSession();
         CriteriaBuilder builder = s.getCriteriaBuilder();
         CriteriaQuery<Orders> query = builder.createQuery(Orders.class);
         Root<Orders> rootOrder = query.from(Orders.class);
-        Predicate predicates =builder.equal(rootOrder.get("customerId"), id);
+        Predicate predicates = builder.equal(rootOrder.get("customerId"), id);
         query.where(predicates);
         Query q = s.createQuery(query);
         return q.getResultList();

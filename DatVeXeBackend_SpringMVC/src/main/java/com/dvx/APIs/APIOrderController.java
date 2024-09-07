@@ -16,6 +16,7 @@ import com.dvx.services.TripService;
 import com.dvx.services.TypesService;
 import com.dvx.configs.VnpayConfig;
 import com.dvx.mapper.OrderDTOMapper;
+import com.dvx.pojo.User;
 import com.dvx.services.UserService;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -28,9 +29,12 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.TimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -211,10 +215,24 @@ public class APIOrderController {
     }
 
     @GetMapping("/viewOrders")
-    public ResponseEntity<?> addOrder(Principal p) {
+    public ResponseEntity<?> viewOrder(Principal p) {
         if (p != null) {
             List<Orders> list = this.orderService.getByUser(this.userSer.getUserByEmail(p.getName()));
             return new ResponseEntity<>(orderDTOMapper.toOrdersResponseList(list), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("You need login", HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/viewTicket/{id}")
+    public ResponseEntity<?> viewTicket(Principal p, @PathVariable(value = "id") long orderID) {
+       
+        if (p != null) {
+            User u = this.userSer.getUserByEmail(p.getName());
+            Orders o = this.orderService.getByUserAndId(u, orderID);
+           
+            return new ResponseEntity<>(
+               o.getTicketSet(),
+                HttpStatus.OK);
         }
         return new ResponseEntity<>("You need login", HttpStatus.BAD_REQUEST);
     }

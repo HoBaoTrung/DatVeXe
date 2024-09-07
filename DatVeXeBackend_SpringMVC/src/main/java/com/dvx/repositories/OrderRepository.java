@@ -17,6 +17,7 @@ import java.util.Map;
 public interface OrderRepository {
     public Orders getById(long id);
     public List<Orders> getByUser(User id);
+    public Orders getByUserAndId(User user, long id);
     public int countOrder(Map<String, String> params);
     public List<Orders> getAllOrder(Map<String, String> params);
     boolean deleteOrder(long id);

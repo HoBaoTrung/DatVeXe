@@ -4,6 +4,7 @@
  */
 package com.dvx.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -55,6 +56,7 @@ public class Ticket implements Serializable {
     private Boolean isActive;
     @JoinColumn(name = "order_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private Orders orderId;
     @JoinColumn(name = "seat_id", referencedColumnName = "id")
     @ManyToOne(optional = false)

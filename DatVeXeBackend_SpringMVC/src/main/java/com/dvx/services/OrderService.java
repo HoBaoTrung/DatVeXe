@@ -20,4 +20,5 @@ public interface OrderService {
     boolean deleteOrder(long id);
     boolean addOrUpdateOrder(Orders u);
     public List<Orders> getByUser(User id);
+    public Orders getByUserAndId(User user, long id);
 }

@@ -22,9 +22,9 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
-    
+
     @Override
-    public List<Orders> getByUser(User id){
+    public List<Orders> getByUser(User id) {
         return this.orderRepository.getByUser(id);
     }
 
@@ -51,6 +51,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean addOrUpdateOrder(Orders u) {
         return this.orderRepository.addOrUpdateOrder(u);
+    }
+
+    @Override
+    public Orders getByUserAndId(User user, long id) {
+        return this.orderRepository.getByUserAndId(user, id);
     }
 
 }
