@@ -5,6 +5,7 @@
 package com.dvx.services.impl;
 
 import com.dvx.pojo.Orders;
+import com.dvx.pojo.User;
 import com.dvx.repositories.OrderRepository;
 import com.dvx.services.OrderService;
 import java.util.List;
@@ -21,6 +22,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
     private OrderRepository orderRepository;
+    
+    @Override
+    public List<Orders> getByUser(User id){
+        return this.orderRepository.getByUser(id);
+    }
 
     @Override
     public List<Orders> getAllOrder(Map<String, String> params) {

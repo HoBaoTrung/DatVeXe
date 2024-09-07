@@ -6,6 +6,7 @@ package com.dvx.repositories.impl;
 
 import com.dvx.pojo.Car;
 import com.dvx.pojo.Orders;
+import com.dvx.pojo.User;
 import com.dvx.repositories.CarRepository;
 import com.dvx.repositories.OrderRepository;
 import java.util.ArrayList;
@@ -45,6 +46,18 @@ public class OrderRepositoryImpl implements OrderRepository {
         Query q = session.createNamedQuery("Order.findById");
         q.setParameter("id", id);
         return (Orders) q.getSingleResult();
+    }
+
+    @Override
+    public List<Orders> getByUser(User id) {
+        Session s = this.sessionFactoryBean.getObject().getCurrentSession();
+        CriteriaBuilder builder = s.getCriteriaBuilder();
+        CriteriaQuery<Orders> query = builder.createQuery(Orders.class);
+        Root<Orders> rootOrder = query.from(Orders.class);
+        Predicate predicates =builder.equal(rootOrder.get("customerId"), id);
+        query.where(predicates);
+        Query q = s.createQuery(query);
+        return q.getResultList();
     }
 
     @Override

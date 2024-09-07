@@ -15,6 +15,7 @@ import com.dvx.services.TicketService;
 import com.dvx.services.TripService;
 import com.dvx.services.TypesService;
 import com.dvx.configs.VnpayConfig;
+import com.dvx.mapper.OrderDTOMapper;
 import com.dvx.services.UserService;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -36,6 +37,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -70,6 +72,9 @@ public class APIOrderController {
 
     @Autowired
     private VnpayConfig vnpayConfig;
+
+    @Autowired
+    private OrderDTOMapper orderDTOMapper;
 
     //thêm hóa đơn
     @PostMapping("/addOrder/{id}")
@@ -183,10 +188,10 @@ public class APIOrderController {
     @PostMapping("/checkPaySuccess")
     private void checkPaySuccess(@RequestParam Map<String, String> params) {
         Long orderId = extractNumberFromString(params.get("vnp_OrderInfo"));
-        
+
         if (params.get("vnp_ResponseCode").equals("00")) {
             String vnpPayDate = params.get("vnp_PayDate");
-            
+
             // Định dạng ban đầu của chuỗi ngày
             SimpleDateFormat inputFormat = new SimpleDateFormat("yyyyMMddHHmmss");
 
@@ -199,12 +204,19 @@ public class APIOrderController {
             } catch (ParseException e) {
                 e.printStackTrace(); // Xử lý lỗi nếu chuỗi không hợp lệ
             }
-            
-            
 
         } else {
             delete(orderId);
         }
+    }
+
+    @GetMapping("/viewOrders")
+    public ResponseEntity<?> addOrder(Principal p) {
+        if (p != null) {
+            List<Orders> list = this.orderService.getByUser(this.userSer.getUserByEmail(p.getName()));
+            return new ResponseEntity<>(orderDTOMapper.toOrdersResponseList(list), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("You need login", HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/deleteOrder/{id}")

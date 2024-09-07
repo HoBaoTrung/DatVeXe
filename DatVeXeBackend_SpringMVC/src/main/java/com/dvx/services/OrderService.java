@@ -5,6 +5,7 @@
 package com.dvx.services;
 
 import com.dvx.pojo.Orders;
+import com.dvx.pojo.User;
 import java.util.List;
 import java.util.Map;
 
@@ -18,4 +19,5 @@ public interface OrderService {
     public List<Orders> getAllOrder(Map<String, String> params);
     boolean deleteOrder(long id);
     boolean addOrUpdateOrder(Orders u);
+    public List<Orders> getByUser(User id);
 }

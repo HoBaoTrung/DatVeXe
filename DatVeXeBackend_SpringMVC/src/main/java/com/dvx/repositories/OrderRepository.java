@@ -5,6 +5,7 @@
 package com.dvx.repositories;
 
 import com.dvx.pojo.Orders;
+import com.dvx.pojo.User;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import java.util.Map;
  */
 public interface OrderRepository {
     public Orders getById(long id);
+    public List<Orders> getByUser(User id);
     public int countOrder(Map<String, String> params);
     public List<Orders> getAllOrder(Map<String, String> params);
     boolean deleteOrder(long id);
