@@ -8,6 +8,7 @@ import googleIcon from '../assets/google-login-icon.png';
 import appleIcon from '../assets/apple-login-icon.png';
 import { Link, useNavigate } from 'react-router-dom';
 import Apis, { endpoint } from '../configs/Apis';
+import Spinner from '../layout/Spinner';
 
 // Inline styles
 const styles = {
@@ -131,6 +132,8 @@ function ForgotPassword() {
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const nav = useNavigate();
+
+  const [loading, setLoading] = useState(false)
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
     // Clear error when user starts typing
@@ -149,14 +152,19 @@ function ForgotPassword() {
       console.log('Email submitted:', email);
 
       try {
+        setLoading(true)
         let res = await Apis.post(endpoint['forgotPassword'], { email })
-       console.info(res.status)
-        if (res.status === 200) {nav('/login')}
-        
-        else { setEmailError(res.data) }
+        console.info(res.status)
+        if (res.status === 200) { nav('/login') }
+
+        else {
+          setEmailError(res.data)
+
+        }
 
 
       } catch (error) {
+        setLoading(false)
         console.log(error.response)
       }
 
@@ -187,9 +195,14 @@ function ForgotPassword() {
             helperText={emailError}
           />
 
-          <Button style={styles.submitButton} onClick={handleSubmit}>
-            Submit
-          </Button>
+
+          {loading === true ?
+
+            <Spinner />
+            :
+            <Button style={styles.submitButton} onClick={handleSubmit}>
+              Submit
+            </Button>}
 
           {/* Or Login With Section */}
           <div style={styles.orContainer}>

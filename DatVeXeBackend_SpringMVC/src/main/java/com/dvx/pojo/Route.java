@@ -65,6 +65,7 @@ public class Route implements Serializable {
     private Date createdAt;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "route_price")
+    @NotNull(message = "Hãy nhập giá tuyến")
     private Double routePrice;
     @JoinColumn(name = "from_station", referencedColumnName = "id")
     @ManyToOne

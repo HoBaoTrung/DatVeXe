@@ -4,10 +4,14 @@
  */
 package com.dvx.configs;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import static org.hibernate.cfg.AvailableSettings.DIALECT;
 import static org.hibernate.cfg.AvailableSettings.SHOW_SQL;
+import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +20,10 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  *
@@ -61,7 +69,6 @@ public class HibernateConfig {
         return props;
     }
 
-    
     @Bean
     public HibernateTransactionManager transactionManager() {
         HibernateTransactionManager transactionManager
@@ -70,4 +77,26 @@ public class HibernateConfig {
                 getSessionFactory().getObject());
         return transactionManager;
     }
+
+//    @Bean
+//    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+//        return new JpaTransactionManager(entityManagerFactory);
+//    }
+//
+//    @Bean
+//    public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder, DataSource dataSource) {
+//        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+//        factory.setDataSource(dataSource());
+//        factory.setPackagesToScan("com.dvx.pojo");
+//
+//        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+//        factory.setJpaVendorAdapter(vendorAdapter);
+//
+//        Map<String, Object> jpaProperties = new HashMap<>();
+//        jpaProperties.put("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
+//        jpaProperties.put("hibernate.show_sql", true);
+//        factory.setJpaPropertyMap(jpaProperties);
+//
+//        return factory;
+//    }
 }

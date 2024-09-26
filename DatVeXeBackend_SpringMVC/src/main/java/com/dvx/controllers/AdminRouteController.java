@@ -59,6 +59,10 @@ public class AdminRouteController {
     @PostMapping("/routeDetail/{id}")
     public String updateRouteDetail(Model model, @ModelAttribute(value = "route") @Valid Route route,
             @PathVariable(value = "id") long id, BindingResult result) {
+        if (result.hasErrors()) {
+            System.out.println("12313");
+            return "routeDetail";
+        }
         Route r = this.routeSer.findById(route.getId());
         route.setCreatedAt(r.getCreatedAt());
         if (!result.hasErrors()) {
@@ -85,7 +89,7 @@ public class AdminRouteController {
     ) {
         route.setCreatedAt(null);
         if (result.hasErrors()) {
-          
+
             model.addAttribute("route", new Route());
             model.addAttribute("stations", this.stationSer.getStations());
             return "routeDetail";

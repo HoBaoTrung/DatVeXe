@@ -4,6 +4,7 @@
  */
 package com.dvx.pojo;
 
+//import com.dvx.MyAnnotation.Unique;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Set;
@@ -49,13 +50,14 @@ public class Car implements Serializable {
     @Column(name = "id")
     private Long id;
     @Basic(optional = false)
-    @NotNull(message = "Phai nhap so hieu xe")
+    @NotNull(message = "Phải nhập số xe")
     @Size(min = 1, max = 10)
+//    @Unique(fieldName = "carNumber", domainClass = Car.class, message = "Car number already exists")
     @Column(name = "car_number")
     private String carNumber;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "seat_price")
-    @NotNull(message = "Phai nhap gia ghe")
+    @NotNull(message = "Phải nhập giá ghế")
     private Double seatPrice;
     @Basic(optional = false)
     @NotNull

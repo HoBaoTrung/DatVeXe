@@ -9,6 +9,7 @@ import com.cloudinary.utils.ObjectUtils;
 import com.dvx.formatter.*;
 import java.util.Properties;
 import java.util.Set;
+import org.hibernate.jpa.boot.spi.EntityManagerFactoryBuilder;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -21,6 +22,7 @@ import org.springframework.format.Formatter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -43,7 +45,7 @@ import org.springframework.web.servlet.view.JstlView;
     "com.dvx.controllers",
     "com.dvx.repositories",
     "com.dvx.configs","com.dvx.mapper",
-    "com.dvx.services", "com.dvx.APIs"
+    "com.dvx.services", "com.dvx.APIs", "com.dvx.Validator","com.dvx.MyAnnotation"
 
 })
 public class WebAppContextConfig implements WebMvcConfigurer {
@@ -128,4 +130,6 @@ public class WebAppContextConfig implements WebMvcConfigurer {
 
         return mailSender;
     }
+    
+
 }

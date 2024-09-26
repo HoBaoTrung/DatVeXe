@@ -69,12 +69,12 @@ public class CarRepositoryImpl implements CarRepository {
 //        q = s.createQuery(query);
 //
 //        return (int) q.getSingleResult(); 
-    return 123;
+        return 123;
     }
 
     @Override
     public boolean addOrUpdateCar(Car c) {
-      Session s = this.sessionFactoryBean.getObject().getCurrentSession();
+        Session s = this.sessionFactoryBean.getObject().getCurrentSession();
         try {
 
             if (c.getId() == null) {
@@ -88,11 +88,12 @@ public class CarRepositoryImpl implements CarRepository {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-        } }
+        }
+    }
 
     @Override
     public boolean deleteCar(long id) {
-     Session s = sessionFactoryBean.getObject().getCurrentSession();
+        Session s = sessionFactoryBean.getObject().getCurrentSession();
         try {
             s.delete(this.getById(id));
             return true;

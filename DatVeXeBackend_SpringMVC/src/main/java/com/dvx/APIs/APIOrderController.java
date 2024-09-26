@@ -82,7 +82,7 @@ public class APIOrderController {
 
     //thêm hóa đơn
     @PostMapping("/addOrder/{id}")
-    public ResponseEntity<?> addOrder(@PathVariable(value = "id") long tripId, @RequestBody List<String> seatIDs,
+    public ResponseEntity<?> addOrder(@PathVariable(value = "id") long tripId, @RequestBody ArrayList<String> seatIDs,
             Principal p) {
 
         Orders order = new Orders();

@@ -69,12 +69,14 @@ public class AdminUserController {
     @PostMapping("/userDetail/{id}")
     public String updateUser(Model model, @ModelAttribute(value = "user") @Valid User u, @PathVariable(value = "id") long id,
             BindingResult result) {
-
+        if (result.hasErrors()) {
+            return "userDetail";
+        }
         if (!result.hasErrors()) {
-            
+
             if (this.useSer.addOrUpdateUser(u)) {
-                    return "redirect:/admin/userDetail/" + id;
-               
+                return "redirect:/admin/userDetail/" + id;
+
             } else {
                 model.addAttribute("user", this.useSer.getUserById(id));
                 model.addAttribute("err", "Cập nhật thất bại!");

@@ -26,37 +26,40 @@ public class CarServiceImpl implements CarService {
 
     @Autowired
     private Cloudinary cloudinary;
-    
+
     @Autowired
     private CarRepository carRepo;
-    
+
     @Override
     public List<Car> getAllCar() {
-    return this.carRepo.getAllCar(); }
+        return this.carRepo.getAllCar();
+    }
 
     @Override
     public Car getById(long id) {
-   return this.carRepo.getById(id);}
+        return this.carRepo.getById(id);
+    }
 
     @Override
     public boolean addOrUpdateCar(Car c) {
-    if (!c.getFile().isEmpty()) {
+        if (!c.getFile().isEmpty()) {
             try {
                 Map res = this.cloudinary.uploader().upload(c.getFile().getBytes(),
                         ObjectUtils.asMap("resource_type", "auto"));
                 c.setImage(res.get("secure_url").toString());
-               
+
             } catch (IOException ex) {
                 Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         }
-    return this.carRepo.addOrUpdateCar(c);
+        return this.carRepo.addOrUpdateCar(c);
     }
 
     @Override
     public boolean deleteCar(long id) {
-    return this.carRepo.deleteCar(id);}
+        return this.carRepo.deleteCar(id);
+    }
 
 
 }

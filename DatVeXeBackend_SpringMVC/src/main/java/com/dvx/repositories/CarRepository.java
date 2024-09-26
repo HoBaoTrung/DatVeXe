@@ -19,4 +19,5 @@ public interface CarRepository {
     public List<Car> getAllCar();
     public boolean addOrUpdateCar(Car c);
     boolean deleteCar(long id);
+    
 }

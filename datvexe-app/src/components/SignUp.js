@@ -10,6 +10,7 @@ import googleIcon from '../assets/google-login-icon.png';
 import appleIcon from '../assets/apple-login-icon.png';
 import Apis, { endpoint } from '../configs/Apis';
 import { useNavigate } from 'react-router-dom';
+import Spinner from '../layout/Spinner';
 
 // Inline styles
 const styles = {
@@ -157,6 +158,7 @@ function SignUp() {
   const [lastName, setLastName] = useState('');
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [formErrors, setFormErrors] = useState({});
+  const [loading, setLoading] = useState(false)
 
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword);
@@ -197,6 +199,7 @@ function SignUp() {
     const errors = validateForm();
     setFormErrors(errors);
     if (Object.keys(errors).length === 0) {
+      setLoading(true)
       // Submit form if no errors
       let form = new FormData()
       form.append("email", email)
@@ -211,6 +214,7 @@ function SignUp() {
         
       }
       catch (err) {
+        setLoading(false)
          // Lấy thông báo lỗi từ phản hồi API
         const errors = {};
         if (err.response.data.name) {
@@ -396,7 +400,14 @@ function SignUp() {
 
           {formErrors.termsAccepted && <p style={styles.checkboxError}>{formErrors.termsAccepted}</p>}
 
-          <Button style={styles.signUpButton} onClick={handleSubmit}>Create Account</Button>
+          
+
+          {loading === true ?
+           
+           <Spinner />
+         :
+         <Button style={styles.signUpButton} onClick={handleSubmit}>Create Account</Button>
+       }
 
           <div style={styles.loginLinkContainer}>
             <span>Already have an account?</span>

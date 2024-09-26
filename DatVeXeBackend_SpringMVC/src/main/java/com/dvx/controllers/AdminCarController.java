@@ -1,109 +1,85 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.dvx.controllers;
 
 import com.dvx.pojo.Car;
 import com.dvx.services.CarService;
 import com.dvx.services.TypesSeatService;
 import com.dvx.services.TypesService;
-import java.util.Map;
-import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-/**
- *
- * @author ASUS
- */
+import javax.validation.Valid;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/admin")
 @PropertySource("classpath:configs.properties")
 public class AdminCarController {
 
     @Autowired
-    private CarService carSer;
+    private CarService carService;
 
     @Autowired
-    private TypesService tySer;
+    private TypesService typesService;
 
     @Autowired
-    private TypesSeatService typeSeat;
+    private TypesSeatService typesSeatService;
 
     @Autowired
     private Environment env;
 
     @GetMapping("/vehicle")
-    public String list(Model model, @RequestParam Map<String, String> params) {
-        System.out.println(carSer.getAllCar());
-        model.addAttribute("cars", carSer.getAllCar());
-        int pageSize = Integer.parseInt(this.env.getProperty("PAGE_SIZE"));
-
-//        long count = this.tripSer.countTrip();
-//        model.addAttribute("counter", Math.ceil(count * 1.0 / pageSize));
+    public String list(Model model) {
+        model.addAttribute("cars", carService.getAllCar());
         return "vehicle";
-    }
-
-    private String getInit(Model model) {
-        model.addAttribute("types", this.tySer.getAllType());
-        model.addAttribute("typeSeat", this.typeSeat.getAllTypeSeat());
-        return "vehicleDetail";
     }
 
     @GetMapping("/vehicleDetail")
     public String getAddCar(Model model) {
-        model.addAttribute("car", new Car());
-        return getInit(model);
-
+        return initializeModel(model, new Car());
     }
 
     @PostMapping("/vehicleDetail")
-    public String addCar(Model model,
-            @ModelAttribute(value = "car") @Valid Car car, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            if (car.getFile().isEmpty()) {
-                model.addAttribute("errImage", "Phải có hình xe");
-            }
-           
-            return getInit(model);
-        }
-        if (!this.carSer.addOrUpdateCar(car)) {
-            model.addAttribute("err", "Thêm thất bại!");
-            model.addAttribute("car", new Car());
-            return "vehicleDetail";
-        }
-        return "redirect:/admin/vehicle";
+    public String addCar(Model model, @ModelAttribute("car") @Valid Car car, BindingResult bindingResult) {
+        return processCar(model, car, bindingResult, false);
     }
 
     @GetMapping("/vehicleDetail/{id}")
-    public String vehicleDetail(Model model, @PathVariable(value = "id") long id) {
-        model.addAttribute("types", this.tySer.getAllType());
-        model.addAttribute("car", this.carSer.getById(id));
-        model.addAttribute("typeSeat", this.typeSeat.getAllTypeSeat());
-        return "vehicleDetail";
+    public String vehicleDetail(Model model, @PathVariable long id) {
+        model.addAttribute("car", carService.getById(id));
+        return initializeModel(model, carService.getById(id));
     }
 
     @PostMapping("/vehicleDetail/{id}")
-    public String updateCar(Model model, @PathVariable(value = "id") long id,
-            @ModelAttribute(value = "car") @Valid Car car, BindingResult bindingResult) {
+    public String updateCar(Model model, @PathVariable long id, @ModelAttribute("car") @Valid Car car, BindingResult bindingResult) {
+        return processCar(model, car, bindingResult, true);
+    }
 
-        if (!this.carSer.addOrUpdateCar(car)) {
-            model.addAttribute("err", "Cập nhật thất bại!");
-            model.addAttribute("car", this.carSer.getById(id));
-            return "vehicleDetail";
+    private String initializeModel(Model model, Car car) {
+        model.addAttribute("car", car);
+        model.addAttribute("types", typesService.getAllType());
+        model.addAttribute("typeSeat", typesSeatService.getAllTypeSeat());
+        return "vehicleDetail";
+    }
+
+    private String processCar(Model model, Car car, BindingResult bindingResult, boolean isUpdate) {
+        if (!isUpdate) {
+            if (car.getFile().isEmpty()) {
+                model.addAttribute("errImage", "Phải có hình xe");
+                return initializeModel(model, car);
+            }
         }
-        return "redirect:/admin/vehicleDetail/" + id;
+
+        if (bindingResult.hasErrors()) {
+            return initializeModel(model, car);
+        }
+
+        boolean isSuccess = carService.addOrUpdateCar(car);
+        model.addAttribute("err", isSuccess ? null : (isUpdate ? "Cập nhật thất bại!" : "Thêm thất bại!"));
+        return isSuccess ? (isUpdate ? "redirect:/admin/vehicleDetail/" + car.getId() : "redirect:/admin/vehicle") : initializeModel(model, car);
     }
 }
