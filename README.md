@@ -39,7 +39,25 @@ A comprehensive platform for customers to book bus tickets online. The website o
 - **VNPAY**: Integrated for seamless and secure payments.
 ---
 ## 📂 Database Structure
+![Database](https://github.com/user-attachments/assets/8c4eff17-3d3f-4844-bea2-59144152c7dd)
 
 ---
 ## 🖼️ Some pictures of the website
+![home](https://github.com/user-attachments/assets/3657496b-5413-40cb-83f3-09927f668422)
+---
+![login](https://github.com/user-attachments/assets/641b0574-72d0-46d3-b426-0530d1991aee)
+---
+![register](https://github.com/user-attachments/assets/22b0ec4c-735b-4d22-8b98-4a3faaa97362)
+---
+![filter_trip](https://github.com/user-attachments/assets/a203f9b9-0504-4bb3-a6ad-907b6e8f79b4)
+---
+![manage_user](https://github.com/user-attachments/assets/11f1bb64-1395-4091-9ca4-d2a35e7f80aa)
+---
+![manage_vehicle](https://github.com/user-attachments/assets/05cd0010-45a2-4b72-af0c-8bbea9484bda)
+---
+![statictis](https://github.com/user-attachments/assets/a332509c-23b4-4114-9ccd-d5aa342759b4)
+
+
+
+
 
